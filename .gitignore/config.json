@@ -1,0 +1,7 @@
+{
+    "GOOGLE_CLIENT_ID": "598520962269-3m131cof13l6qku1f565diilh12hfgk8.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET": "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",
+    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
+    "FLASK_SECRET": "reallysecretstring",
+    "FLASK_PORT": 5001
+}

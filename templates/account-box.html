@@ -1,0 +1,14 @@
+
+<div class="box">
+    {% if session %}
+    <p>Welcome, {{session.userinfo.given_name}}!</p>
+    
+    <!--   <p>You are logged in with {{session.userinfo.email}}</p>   -->
+    
+    <p><a href="{{url_for('logout')}}">Logout</a></p>
+    
+    {% else %}
+    <p><a href="{{url_for('googleLogin')}}">Sign in with Google</a></p>
+    {% endif %}    
+</div>
+
