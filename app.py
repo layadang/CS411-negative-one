@@ -7,30 +7,24 @@ import requests
 from flask import Flask, abort, redirect, render_template, session, url_for
 from authlib.integrations.flask_client import OAuth
 
-
 app = Flask(__name__)
 
 # Configuration
-appConf = {
-    "GOOGLE_CLIENT_ID": os.environ.get("GOOGLE_CLIENT_ID", None),
-    "GOOGLE_CLIENT_SECRET": os.environ.get("GOOGLE_CLIENT_SECRET", None),
-    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
-    "FLASK_SECRET": "reallysecretstring",
-    "FLASK_PORT": 5001
-}
+with open('.gitignore/config.json', 'r') as config_file:
+    config = json.load(config_file)
 
-app.secret_key = appConf.get("FLASK_SECRET")
+app.secret_key = config.get("FLASK_SECRET")
 
 oauth = OAuth(app)
 
 oauth.register(
     "myApp",
-    client_id=appConf.get("GOOGLE_CLIENT_ID"),
-    client_secret=appConf.get("GOOGLE_CLIENT_SECRET"),
+    client_id=config.get("GOOGLE_CLIENT_ID"),
+    client_secret=config.get("GOOGLE_CLIENT_SECRET"),
     client_kwargs={
         "scope": "openid profile email https://www.googleapis.com/auth/userinfo.profile",
     },
-    server_metadata_url=f'{appConf.get("OAUTH2_META_URL")}',
+    server_metadata_url=f'{config.get("OAUTH2_META_URL")}',
 )
 
 @app.route("/")
@@ -43,7 +37,7 @@ def googleCallback():
     token = oauth.myApp.authorize_access_token()
 
     # fetch user data with access token
-    personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
+    personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses"
     personData = requests.get(personDataUrl, headers={
         "Authorization": f"Bearer {token['access_token']}"
     }).json()
@@ -64,5 +58,5 @@ def logout():
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=appConf.get(
+    app.run(host="0.0.0.0", port=config.get(
         "FLASK_PORT"), debug=True)

@@ -11,9 +11,11 @@
         <div class="name">
             <h1>movir</h1>
             {% if session %}
-            <p>Welcome {{session.userinfo.given_name}}!</p>
-            <p>You are logged in with {{session.userinfo.email}}</p>
-            <p><a href="{{url_for('logout')}}">Logout</a></p>
+                <p>Welcome {{session.userinfo.given_name}}!</p>
+                <p>You are logged in with {{session.userinfo.email}}</p>
+
+                <p><a href="{{url_for('logout')}}">Logout</a></p>
+                
             {% else %}
             <p><a href="{{url_for('googleLogin')}}">Login with Google</a></p>
             {% endif %}
