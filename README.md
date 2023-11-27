@@ -16,14 +16,14 @@ This is a Movie Recommendation project that provides personalized movie recommen
 
 ## Prerequisites
 
-Before you start, ensure you have Python installed and preferably using Python interpreter 3.11.2.
+Before you start, ensure you have Python installed and preferably using Python interpreter 3.11.2. SSH key is also required to clone private repo.
 
 ## Getting Started
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/layadang/CS411-negative-one.git
+   git clone git@github.com:layadang/CS411-negative-one.git
    ```
 
 2. Install dependencies:
@@ -36,7 +36,7 @@ Before you start, ensure you have Python installed and preferably using Python i
 
 3. Obtain Google OAuth API credentials:
 
-   - Ask Laya to configure the OAuth client ID and client secret for now
+   - must obtain secret file as specified in gitignore file
 
 5. Start the application:
 
@@ -61,7 +61,7 @@ This project is not currently licensed RIP.
 This project is built by Team Negative One:
 
 - Laya: front end via flask, oauth config
-- Xinny: google vertex llm training with imdb api
+- Xinny: google vertex llm training with imdb data
 - Harris, Cindy, Xavier: user info database through mongodb
 
 Happy movie watching! 🍿🎬
