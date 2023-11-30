@@ -13,32 +13,42 @@ def make_api_request(url, params, headers):
 
 def convert_to_json(data):
     def process_entry(entry):
-        genres = [genre['text'] for genre in entry['genres']['genres']]
-        genre_str = ', '.join(genres)
+        # Check if all required attributes are present
+        if all(attr in entry for attr in ['titleText', 'releaseYear', 'genres', 'plot']):
+            # Check if 'genres' attribute is present
+            genres_data = entry.get('genres')
+            if genres_data:
+                genres = genres_data.get('genres', [])
+                genre_str = ', '.join([genre['text'] for genre in genres])
+            else:
+                genre_str = ''
 
-        plot = entry['plot']
-        plot_text = plot['plotText']['plainText'] if plot and plot.get('plotText') else None
+            plot = entry['plot']
+            plot_text = plot['plotText']['plainText'] if plot and plot.get('plotText') else None
 
-        json_entry = {
-            "title": entry['titleText']['text'],
-            "year": entry['releaseYear']['year'],
-            "genre": genre_str,
-            "plot": plot_text,
-            # Add other fields as needed
-        }
+            json_entry = {
+                "title": entry['titleText']['text'],
+                "year": entry['releaseYear']['year'],
+                "genre": genre_str,
+                "plot": plot_text
+            }
 
-        return json_entry
+            return json_entry
+        else:
+            # If any required attribute is missing, return None
+            return None
 
     result = {
-        "page": 1,  # You may need to adjust this based on your actual page logic
-        "next": "",  # You may need to update this based on your actual next page logic
+        "page": 1,
+        "next": "",
         "entries": len(data),
         "results": []
     }
 
     for entry in data:
         json_entry = process_entry(entry)
-        result["results"].append(json_entry)
+        if json_entry:
+            result["results"].append(json_entry)
 
     return result
 
@@ -69,10 +79,10 @@ if __name__ == "__main__":
     api_url = "https://moviesdatabase.p.rapidapi.com/titles"
     params = {
         'info': 'base_info',
-        'startYear': '2022',
+        # Iterate through year 2022, 2023, and 2024 each once to get the full api_response
+        # It seems like api's own year range filter is inaccurate
+        'year': '2024',
         'titleType': 'movie',
-        'sort': 'year.incr',
-        'endYear': '2024',
         'page': 1
     }
 
@@ -100,6 +110,8 @@ if __name__ == "__main__":
                 break
 
             # Update the 'page' parameter to fetch the next page of results
+            # NOTE: if page number exceeds maximum page result, API automatically returns page 1 over and over again
+            # DO NOT LEAVE THE API RUNNING AND MONITOR AT ALL TIMES
             params['page'] += 1
         else:
             print("Failed to retrieve data from the API.")

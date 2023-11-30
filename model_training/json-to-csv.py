@@ -16,7 +16,7 @@ def json_to_csv(json_data, csv_filename):
 json_filename = 'model_training/api_response.json'
 
 # Specify the output CSV file name
-output_csv_filename = 'model_training/api_response_cleaned.csv'
+output_csv_filename = 'model_training/api_response.csv'
 
 # Read JSON data from file
 with open(json_filename, 'r', encoding='utf-8') as json_file:
