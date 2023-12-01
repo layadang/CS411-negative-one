@@ -10,7 +10,7 @@ from authlib.integrations.flask_client import OAuth
 app = Flask(__name__)
 
 # Configuration
-with open('.gitignore/config.json', 'r') as config_file:
+with open('secret/config.json', 'r') as config_file:
     config = json.load(config_file)
 
 app.secret_key = config.get("FLASK_SECRET")
