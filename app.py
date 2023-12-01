@@ -50,6 +50,12 @@ def register_user():
 
 @app.route("/")
 def home():
+    if session:
+        data = (session.get("user"))
+        json_str = json.dumps(data)
+        resp = json.loads(json_str)
+        print(resp['userinfo']['given_name'])
+
     return render_template("index.html", session=session.get("user"))
 
 @app.route("/signin-google")
@@ -65,6 +71,7 @@ def googleCallback():
     token["personData"] = personData
     # set complete user information in the session
     session["user"] = token
+    
     return redirect(url_for("home"))
 
 @app.route("/google-login")
