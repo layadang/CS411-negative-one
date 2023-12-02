@@ -6,11 +6,12 @@ import requests
 
 from flask import Flask, abort, redirect, render_template, session, url_for
 from authlib.integrations.flask_client import OAuth
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 # Configuration
-with open('.gitignore/config.json', 'r') as config_file:
+with open('secret/config.json', 'r') as config_file:
     config = json.load(config_file)
 
 app.secret_key = config.get("FLASK_SECRET")
@@ -27,9 +28,41 @@ oauth.register(
     server_metadata_url=f'{config.get("OAUTH2_META_URL")}',
 )
 
+# MongoDB Atlas connection
+mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
+client = MongoClient(mongo_uri)
+db = client.TestCluster1
+registered_users = db.RegisteredUsers
+
+@app.route('/register', methods=['POST'])
+def register_user():
+    """
+    Endpoint to register a new user.
+    Expects 'name' and 'email' in the request body.
+    """
+    user_data = request.json
+    if not user_data or 'name' not in user_data or 'email' not in user_data:
+        return jsonify({"error": "Missing name or email"}), 400
+
+    # Add user to MongoDB
+    registered_users.insert_one(user_data)
+    return jsonify({"message": "User registered successfully"}), 201
+
 @app.route("/")
 def home():
-    return render_template("index.html", session=session.get("user"))
+    user_data = session.get("user")
+
+    if user_data:
+        json_str = json.dumps(user_data)
+        resp = json.loads(json_str)
+        print("hello")
+        
+        # Check if 'userinfo' key exists before trying to access 'given_name'
+        userinfo = resp.get('userinfo')
+        if userinfo:
+            print(userinfo['given_name'])
+
+    return render_template("index.html", session=user_data)
 
 @app.route("/signin-google")
 def googleCallback():
@@ -44,6 +77,7 @@ def googleCallback():
     token["personData"] = personData
     # set complete user information in the session
     session["user"] = token
+    
     return redirect(url_for("home"))
 
 @app.route("/google-login")
