@@ -73,8 +73,11 @@ def home():
         if userinfo:
             given_name = userinfo['given_name']
 
+        return render_template("index.html", session=user_data)
+    
+    else:
+        return render_template("not_signed_in.html", session=user_data)
 
-    return render_template("index.html", session=user_data)
 
 
 @app.route("/signin-google")

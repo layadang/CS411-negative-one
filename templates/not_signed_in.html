@@ -13,22 +13,17 @@
             <h1>MovieFindr</h1>
         </div>
 
-        {% include 'account-box.html' %}
-
     </div>
 
 
-    <div class="choice-box">
-        <p>Movie Title</p>
-        <div class="movie-image">
-
-        </div>
-        <div class="buttons">
-            <button class="no"> &#10006 </button>
-            <button class="yes"> &#10004 </button>
-        </div>
-
+    <div>
+        <a class="sign-in" href="{{url_for('googleLogin')}}">
+            <p>Sign In with <br> <b>Google</b> to Begin</p>
+        </a>
     </div>
+
+
+
     
 </body>
 </html>
