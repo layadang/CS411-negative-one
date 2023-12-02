@@ -4,7 +4,7 @@ import os
 import json
 import requests
 
-from flask import Flask, abort, redirect, render_template, session, url_for
+from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
 from pymongo import MongoClient
 
