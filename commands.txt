@@ -1,0 +1,11 @@
+see all branches - git branch -a 
+switch to a branch - git switch <branchname>
+get latest information - git pull 
+save changes - git add .
+commit changes - git commit -m "your message"
+push to repo - git push
+
+make a new branch - git switch -c newBranchName
+
+once you're ready - git merge 
+resolve conflicts if they exist
