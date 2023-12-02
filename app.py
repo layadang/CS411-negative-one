@@ -50,11 +50,12 @@ def register_user():
 
 @app.route("/")
 def home():
-    # if session:
-    #     data = (session.get("user"))
-    #     json_str = json.dumps(data)
-    #     resp = json.loads(json_str)
-    #     print(resp['userinfo']['given_name'])
+    if session:
+        data = (session.get("user"))
+        json_str = json.dumps(data)
+        resp = json.loads(json_str)
+        print("hello")
+        print(resp['userinfo']['given_name'])
 
     return render_template("index.html", session=session.get("user"))
 
