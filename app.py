@@ -38,26 +38,44 @@ registered_users = db.RegisteredUsers
 def register_user():
     """
     Endpoint to register a new user.
-    Expects 'name' and 'email' in the request body.
+    Expects 'first_name' and 'email' in the request body.
     """
     user_data = request.json
-    if not user_data or 'name' not in user_data or 'email' not in user_data:
-        return jsonify({"error": "Missing name or email"}), 400
 
-    # Add user to MongoDB
-    registered_users.insert_one(user_data)
-    return jsonify({"message": "User registered successfully"}), 201
+    # Validate that both first_name and email are present in the request
+    if not user_data or 'first_name' not in user_data or 'email' not in user_data:
+        abort(400)  # Bad request
+
+    # Extract first_name and email from the request data
+    first_name = user_data['first_name']
+    email = user_data['email']
+
+    # Insert the new user data into the MongoDB collection
+    try:
+        registered_users.insert_one({"email": email, "first_name": first_name})
+    except:
+        abort(500)  # Internal server error
+
+    return '', 204  # No content response
+
 
 @app.route("/")
 def home():
-    if session:
-        data = (session.get("user"))
-        json_str = json.dumps(data)
+    user_data = session.get("user")
+
+    if user_data:
+        json_str = json.dumps(user_data)
         resp = json.loads(json_str)
         print("hello")
-        print(resp['userinfo']['given_name'])
+        
+        # Check if 'userinfo' key exists before trying to access 'given_name'
+        userinfo = resp.get('userinfo')
+        if userinfo:
+            given_name = userinfo['given_name']
 
-    return render_template("index.html", session=session.get("user"))
+
+    return render_template("index.html", session=user_data)
+
 
 @app.route("/signin-google")
 def googleCallback():
