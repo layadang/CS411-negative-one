@@ -1,6 +1,5 @@
 
 <div class="box">
-    {% if session %}
     <span>  
         <p>Welcome, {{session.userinfo.given_name}}!</p>
     </span>
@@ -8,11 +7,5 @@
     <div class="dropdown-content">
         <p><a href="{{url_for('logout')}}">Logout</a></p>
     </div>
-    
-    {% else %}
-    <span>
-        <p><a href="{{url_for('googleLogin')}}">Sign In with Google</a></p>
-    </span>
-    {% endif %}    
 </div>
 
