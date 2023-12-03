@@ -19,13 +19,25 @@
 
 
     <div class="choice-box">
-        <p>Movie Title</p>
-        <div class="movie-image">
-
+        <h2> {{title}}</h2>
+        <div class="movie-image" 
+            style="background-image: url('{{ image_file }}');">
         </div>
+
+        <div class="movie-description">
+            <p> <i>Genres: {{genres}}</i> </p>
+            <p> {{description}} </p>
+        </div>
+
         <div class="buttons">
-            <button class="no"> &#10006 </button>
-            <button class="yes"> &#10004 </button>
+            <a href="{{ url_for('like') }}">
+                <button class="no"> <a href="{{ url_for('like') }}"> &#10006</a> </button>
+            </a>
+
+            <a href="{{ url_for('like') }}">
+                <button class="yes"> &#10004 </button>
+            </a>
+                
         </div>
 
     </div>

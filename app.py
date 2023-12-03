@@ -8,6 +8,9 @@ from flask import Flask, abort, redirect, render_template, session, url_for
 from authlib.integrations.flask_client import OAuth
 from pymongo import MongoClient
 
+# our other function:
+from info_get import *
+
 app = Flask(__name__)
 
 # Configuration
@@ -72,13 +75,40 @@ def home():
         userinfo = resp.get('userinfo')
         if userinfo:
             given_name = userinfo['given_name']
+        
+        titles = ["The Hunger Games", "Spriggan", "Nefarious", "Kill Switch"]
+        current_movie_index = session.get('current_movie_index', 0)
+        title = titles[current_movie_index]
 
-        return render_template("index.html", session=user_data)
+        info = find_movie(title)
+        image_file = info[1]
+        description = info[2]
+        genres = info[3]
+
+        return render_template("index.html", 
+                               session=user_data,
+                               title=title,
+                               image_file=image_file,
+                               description=description,
+                               genres=genres)
     
     else:
-        return render_template("not_signed_in.html", session=user_data)
+        # user is not signed in:
+        return render_template("not_signed_in.html", 
+                               session=user_data)
 
+@app.route("/like")
+def like():
+    current_movie_index = session.get('current_movie_index', 0)
+    # CHANGE THIS:
+    total_movies = 4 
 
+    # Reset 0 if all movies reached?
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+
+    return redirect(url_for('home'))
 
 @app.route("/signin-google")
 def googleCallback():

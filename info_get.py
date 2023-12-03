@@ -4,13 +4,12 @@ import json
 
 def make_api_request(url, params, headers):
     try:
-
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
 
-        res = response.json()
+        res = response.json() 
 
-        return(res['results'][0]['primaryImage']['url'])
+        return(res)
     
     except requests.exceptions.RequestException as e:
         print(f"Error making API request: {e}")
@@ -19,7 +18,8 @@ def make_api_request(url, params, headers):
 
 def find_movie(title):
 
-    api_url = "https://moviesdatabase.p.rapidapi.com/titles/search/title/" + title
+    movie_name = title.replace(" ", "%20")
+    api_url = "https://moviesdatabase.p.rapidapi.com/titles/search/title/" + movie_name
     params = {
         'info': 'base_info',
         'titleType': 'movie',
@@ -30,6 +30,15 @@ def find_movie(title):
         "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
     }
 
-    return make_api_request(api_url, params, headers)
+    res = make_api_request(api_url, params, headers)
+    image_url = res['results'][0]['primaryImage']['url']
+    description = res['results'][0]['plot']['plotText']['plainText']
+    genres = res['results'][0]['genres']['genres']
+    genres_str = ', '.join([genre['text'] for genre in genres])
 
-print(find_movie("Nefarious"))
+    return title, image_url, description, genres_str
+
+#print(find_movie("Nefarious"))
+# print(find_movie("The Hunger Games"))
+
+find_movie("The Hunger Games")

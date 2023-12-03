@@ -116,7 +116,7 @@ a {
   }
 
 .choice-box {
-    height: 90vh;
+    height: 1000px;
     width: 50vw;
     margin: 5vh 0 10vh 0 ;
     border-radius: 25px;
@@ -128,9 +128,22 @@ a {
     text-align: center;
 }
 
-.choice-box p {
+.choice-box .movie-image {
+    height: 90%;
+    width: 500px;
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center center; 
+}
+
+.choice-box h2 {
     font-size: 20pt;
-    margin-bottom: auto;
+    margin: 10px 0 10px;
+}
+
+.choice-box p {
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 .choice-box .buttons button {
@@ -139,11 +152,13 @@ a {
     background-color: var(--theme2);
     border-radius: 100px;
     border: none;
-    margin: 30px;
+    margin: 0 30px 0;
     margin-bottom: 30px;
     font-size: 20pt;
+    transition: all .2s ease-in-out;
 }
 
 .choice-box button:hover {
     cursor: pointer;
+    transform: scale(1.2);
 }
