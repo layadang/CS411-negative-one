@@ -4,7 +4,7 @@ import os
 import json
 import requests
 
-from flask import Flask, abort, redirect, render_template, session, url_for
+from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
 from pymongo import MongoClient
 
@@ -31,32 +31,46 @@ oauth.register(
 # MongoDB Atlas connection
 mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
 client = MongoClient(mongo_uri)
-db = client.TestCluster1
-registered_users = db.RegisteredUsers
+db = client["TestCluster1"]
+registered_users = db["RegisteredUsers"]
 
 @app.route('/register', methods=['POST'])
 def register_user():
     """
-    Endpoint to register a new user.
-    Expects 'name' and 'email' in the request body.
+    Endpoint for registering new users.
+    The request body should contain 'first_name' and 'email'.
     """
-    user_data = request.json
-    if not user_data or 'name' not in user_data or 'email' not in user_data:
-        return jsonify({"error": "Missing name or email"}), 400
+    # Check if the Content-Type is 'application/json'
+    if request.content_type != 'application/json':
+        return 'Request must be in JSON format', 400
 
-    # Add user to MongoDB
+    user_info = request.json()
+    user_data = {
+        "name": user_info.get("name"),
+        "email": user_info.get("email"),
+        # More fields can be added as needed
+    }
     registered_users.insert_one(user_data)
-    return jsonify({"message": "User registered successfully"}), 201
+    return 'User registration successful', 200  # successful response
 
 @app.route("/")
 def home():
-    # if session:
-    #     data = (session.get("user"))
-    #     json_str = json.dumps(data)
-    #     resp = json.loads(json_str)
-    #     print(resp['userinfo']['given_name'])
+    user_data = session.get("user")
 
-    return render_template("index.html", session=session.get("user"))
+    if user_data:
+        json_str = json.dumps(user_data)
+        resp = json.loads(json_str)
+        print("hello")
+        
+        # Check if 'userinfo' key exists before trying to access 'given_name'
+        userinfo = resp.get('userinfo')
+        if userinfo:
+            given_name = userinfo['given_name']
+            register_user()
+
+
+    return render_template("index.html", session=user_data)
+
 
 @app.route("/signin-google")
 def googleCallback():
