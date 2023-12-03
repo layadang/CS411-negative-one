@@ -29,8 +29,7 @@ oauth.register(
 )
 
 # MongoDB Atlas connection
-mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
-client = MongoClient(mongo_uri)
+client = MongoClient(config.get("mongo_uri"))
 db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
