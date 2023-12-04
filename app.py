@@ -4,7 +4,7 @@ import os
 import json
 import requests
 
-from flask import Flask, abort, redirect, render_template, session, url_for
+from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
 from pymongo import MongoClient
 
@@ -31,33 +31,27 @@ oauth.register(
 # MongoDB Atlas connection
 mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
 client = MongoClient(mongo_uri)
-db = client.TestCluster1
-registered_users = db.RegisteredUsers
+db = client["TestCluster1"]
+registered_users = db["RegisteredUsers"]
 
 @app.route('/register', methods=['POST'])
 def register_user():
     """
-    Endpoint to register a new user.
-    Expects 'first_name' and 'email' in the request body.
+    注册新用户的端点。
+    请求体中应包含 'first_name' 和 'email'。
     """
-    user_data = request.json
+    # Check if the Content-Type is 'application/json'
+    if request.content_type != 'application/json':
+        return '请求必须是 JSON 格式', 400
 
-    # Validate that both first_name and email are present in the request
-    if not user_data or 'first_name' not in user_data or 'email' not in user_data:
-        abort(400)  # Bad request
-
-    # Extract first_name and email from the request data
-    first_name = user_data['first_name']
-    email = user_data['email']
-
-    # Insert the new user data into the MongoDB collection
-    try:
-        registered_users.insert_one({"email": email, "first_name": first_name})
-    except:
-        abort(500)  # Internal server error
-
-    return '', 204  # No content response
-
+    user_info = request.json()
+    user_data = {
+        "name": user_info.get("name"),
+        "email": user_info.get("email"),
+        # 可以根据需要添加更多字段
+    }
+    registered_users.insert_one(user_data)
+    return '用户注册成功', 200  # 成功响应
 
 @app.route("/")
 def home():
@@ -72,6 +66,7 @@ def home():
         userinfo = resp.get('userinfo')
         if userinfo:
             given_name = userinfo['given_name']
+            register_user()
 
 
     return render_template("index.html", session=user_data)
