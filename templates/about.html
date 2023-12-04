@@ -16,10 +16,33 @@
         <div class="name">
             <h1>MovieFinder</h1>
         </div>
-        {% include 'account-box.html' %}
+
     </div>
 
-    {% include 'movie-partial.html' %}
-    
+    <div class="content-about">
+        <div class="content-desc2">
+            <div class="proj-description">
+                <p>
+                    This is a Movie Recommendation project that provides personalized 
+                    movie recommendations to users. It utilizes a Flask-based front-end, 
+                    a custom-trained Language Model (LLM) recommendation system, the 
+                    <a class="link-api"
+                        href="https://rapidapi.com/SAdrian/api/moviesdatabase">
+                        MoviesDatabase accessed through RapidAPI </a> 
+                    
+                    and MongoDB to store user information from 
+                    Google OAuth. The project combines these technologies to 
+                    deliver a seamless movie recommendation experience.
+                </p>
+            </div>
+
+            <div class="get-started">
+                <a href="{{url_for('home')}}"> Get Started → </a>
+            </div>
+        </div>
+    </div>
+
+
+
 </body>
 </html>
