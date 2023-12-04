@@ -73,10 +73,11 @@ def home():
             
             # user_info = request.json()
             post = {
+                
                 "_id": email,
                 "name": name
                 
-                # More fields can be added as needed
+                # Add like later
             }
             
             registered_users.insert_one(post)
