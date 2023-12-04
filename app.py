@@ -8,6 +8,9 @@ from flask import Flask, abort, redirect, render_template, session, url_for, req
 from authlib.integrations.flask_client import OAuth
 from pymongo.mongo_client import MongoClient
 
+# our other function:
+from info_get import *
+
 app = Flask(__name__)
 
 # Configuration
@@ -56,32 +59,79 @@ def register_user():
 def home():
     user_data = session.get("user")
 
+    # user is signed in:
     if user_data:
         json_str = json.dumps(user_data)
         resp = json.loads(json_str)
-        print("hello")
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:            
-            name = userinfo['name']
-            email = userinfo['email']
-            
-            
-            # print("run to here")
-            
-            # user_info = request.json()
-            post = {
-                "_id": email,
-                "name": name
-                
-                # More fields can be added as needed
-            }
-            
-            registered_users.insert_one(post)
-            print('User registration successful', 200)  # successful response
-    return render_template("index.html", session=user_data)
+        if userinfo:
+            given_name = userinfo['given_name']
+        
+        titles = ["Iron Man", 
+                  "Good Will Hunting", 
+                  "Nefarious", 
+                  "Kill Switch", 
+                  "Endgame", 
+                  "The Avengers", 
+                  "10 Things I Hate About You", 
+                  "Love Actually"]
+        
+        current_movie_index = session.get('current_movie_index', 0)
 
+        title = titles[current_movie_index]
+
+        # call find_movie() function from info_get.py
+        info = find_movie(title)
+
+        # need to implement skip on these if any of them are empty
+        image_file = info[1]
+        description = info[2]
+        genres = info[3]
+
+        return render_template("index.html", 
+                               session=user_data,
+                               title=title,
+                               image_file=image_file,
+                               description=description,
+                               genres=genres)
+    
+    else:
+        # user is not signed in:
+        return render_template("not_signed_in.html", 
+                               session=user_data)
+
+# when checkmark button is clicked
+@app.route("/like")
+def like():
+    current_movie_index = session.get('current_movie_index', 0)
+    # CHANGE THIS, theoretically many movies we dont need:
+    total_movies = 8
+
+    # Reset 0 if all movies reached
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+    
+    return redirect(url_for('home'))
+
+@app.route("/dislike")
+def dislike():
+    current_movie_index = session.get('current_movie_index', 0)
+    # CHANGE THIS, theoretically many movies we dont need:
+    total_movies = 8
+
+    # Reset 0 if all movies reached
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+    
+    return redirect(url_for('home'))
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/signin-google")
 def googleCallback():

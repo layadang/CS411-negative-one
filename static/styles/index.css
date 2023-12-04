@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&display=swap');
 :root {
     --theme1: #0385ff;
     --theme2: #06D6A0;
@@ -22,6 +21,7 @@ body {
 
 a {
     text-decoration: none;
+    color: black;
 }
 
 .main-bar {
@@ -42,41 +42,74 @@ a {
 
 .box {
     background-color: white;
-    height: 30px;
-    width: 150px;
+    height: 80px;
+    width: 180px;
+
     border-radius: 25px;
-    box-shadow: 0px 0px 40px 15px var(--theme5);
+    /* border: 1px solid;
+    border-color: var(--theme5); */
+    /* box-shadow: 0px 0px 40px 15px var(--theme5); */
 
     text-align: center;
     position: absolute;
-    top:10px;
-    right: 10px;
+    top: 2px;
+    right: 15px;
     margin: 1em;
-    padding: 1em;
+    padding: 0 10px 0 10px;
 }
 
 .box span {
     display: flex;
+    z-index: 2;
+
     align-items: center;
     justify-content: center;
     height: 100%;
-    margin: 0;
-    padding: 0;
+    text-align: center;
+    font-size: 14pt;
+    font-weight: 500;
 }
 
-.box .dropdown-content {
-    display: block; /* change to none for hover effect */
-    background-color: white;
+.box .dropdown-content p {
+    display: none; /* change to none for hover effect */
+    z-index: -5;
+    background-color: rgb(247, 247, 247);
+    font-weight: 400;
     color: black;
-    margin-top: 10vh;
+    width: 50%;
+    text-align: center;
+    margin: 0 0 0;
+    padding: 10px 10px;
+    font-size: 10pt;
+    border: 1px solid;
+    border-color: rgb(225, 225, 225);
 }
 
-.box:hover .dropdown-content {
-    display: block;
-  }
+.box:hover .dropdown-content p {
+    display: inline-block;
+
+}
+
+.box:hover {
+    cursor: pointer;
+}
+
+.get-started {
+    background-color: white;
+    border-radius: 25px;
+    font-size: 20pt;
+    font-weight: 700;
+    padding: 10px 20px;
+    margin-top: 25px;
+    transition: all .2s ease-in-out;
+}
+
+.get-started:hover {
+    transform: scale(1.2);
+}
 
 .choice-box {
-    height: 90vh;
+    height: 1000px;
     width: 50vw;
     margin: 5vh 0 10vh 0 ;
     border-radius: 25px;
@@ -88,19 +121,172 @@ a {
     text-align: center;
 }
 
-.choice-box p {
+.choice-box .movie-image {
+    height: 90%;
+    width: 500px;
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center center; 
+}
+
+.choice-box h2 {
     font-size: 20pt;
-    margin-bottom: auto;
+    margin: 10px 0 10px;
+}
+
+.choice-box p {
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 .choice-box .buttons button {
-    width: 60px;
-    height: 60px;
-    background-color: var(--theme2);
+    width: 80px;
+    height: 80px;
+    background-color: white;
     border-radius: 100px;
     border: none;
-    margin: 30px;
-    margin-bottom: 30px;
+    margin: 0 30px 0;
+    margin-bottom: 20px;
     font-size: 20pt;
+    transition: all .2s ease-in-out;
 }
 
+.choice-box button:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.choice-box svg {
+    height: 100%;
+    width: 100%;
+}
+
+.content-desc {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.link-api {
+    text-decoration: underline;
+}
+
+.link-api:hover {
+    font-style: italic;
+}
+
+.sign-in {
+    margin: 50px 0 0;
+    transition: all .2s ease-in-out;
+}
+
+.sign-in:hover {
+    transform: scale(1.2);
+}
+.proj-description {
+    background-color: white;
+    font-size: 18pt;
+    color: black;
+    margin: 0 250px 0;
+    border-radius: 25px;
+}
+
+.proj-description p {
+    margin: 20px 50px 20px;
+}
+
+/* this is modified Google's sign in button code */
+.gsi-material-button {
+    background-color: WHITE;
+    background-image: none;
+    border: 1px solid #747775;
+    border-radius: 20px;
+    box-sizing: border-box;
+    color: #1f1f1f;
+    cursor: pointer;
+    font-family: 'Roboto', arial, sans-serif;
+    font-size: 16px;
+    height: 50px;
+    letter-spacing: 0.25px;
+    outline: none;
+    overflow: hidden;
+    padding: 0 12px;
+    position: relative;
+    text-align: center;
+    transition: background-color .218s, border-color .218s, box-shadow .218s;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+    max-width: 500px;
+    min-width: min-content;
+  }
+  
+  .gsi-material-button .gsi-material-button-icon {
+    height: 20px;
+    margin-right: 12px;
+    min-width: 20px;
+    width: 20px;
+  }
+  
+  .gsi-material-button .gsi-material-button-content-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .gsi-material-button .gsi-material-button-contents {
+    flex-grow: 0;
+    font-family: 'Roboto', arial, sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }
+  
+  .gsi-material-button .gsi-material-button-state {
+    transition: opacity .218s;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  
+  .gsi-material-button:disabled {
+    cursor: default;
+    background-color: #ffffff61;
+    border-color: #1f1f1f1f;
+  }
+  
+  .gsi-material-button:disabled .gsi-material-button-contents {
+    opacity: 38%;
+  }
+  
+  .gsi-material-button:disabled .gsi-material-button-icon {
+    opacity: 38%;
+  }
+  
+  .gsi-material-button:not(:disabled):active .gsi-material-button-state, 
+  .gsi-material-button:not(:disabled):focus .gsi-material-button-state {
+    background-color: #303030;
+    opacity: 12%;
+  }
+  
+  .gsi-material-button:not(:disabled):hover {
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  }
+  
+  .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
+    background-color: #303030;
+    opacity: 8%;
+  }
+  
