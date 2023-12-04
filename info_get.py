@@ -2,6 +2,9 @@ import os
 import requests
 import json
 
+with open('secret/api-key.json', 'r') as api_file:
+    api = json.load(api_file)
+
 def make_api_request(url, params, headers):
     try:
         response = requests.get(url, params=params, headers=headers)
@@ -26,8 +29,8 @@ def find_movie(title):
     }
 
     headers = {
-        "X-RapidAPI-Key": "deba0d8e00msh8e8b85337b08fc9p10c542jsn1c6116b93fb4",
-        "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
+        "X-RapidAPI-Key": api.get("laya-Key"),
+        "X-RapidAPI-Host": api.get("laya-Host")
     }
 
     res = make_api_request(api_url, params, headers)

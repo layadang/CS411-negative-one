@@ -1,0 +1,21 @@
+<div class="choice-box">
+    <h2> {{title}}</h2>
+    <div class="movie-image" 
+        style="background-image: url('{{ image_file }}');">
+    </div>
+
+    <div class="movie-description">
+        <p> <i>Genres: {{genres}}</i> </p>
+        <p> {{description}} </p>
+    </div>
+
+    <div class="buttons">
+        <a class="no" href="{{ url_for('dislike') }}">
+            <button class="no"> <svg fill="#ef4e4e" viewBox="-0.48 -0.48 24.96 24.96" xmlns="http://www.w3.org/2000/svg" id="cross" class="icon glyph" stroke="#ef4e4e" stroke-width="2.4"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"></path></g></svg> </button>
+        </a>
+
+        <a class="yes" href="{{ url_for('like') }}">
+            <button class="yes"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z" fill="#66f4ab"></path> </g></svg> </button>
+        </a>     
+    </div>
+</div>

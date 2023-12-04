@@ -13,6 +13,7 @@
         <div class="icon" style="height: 110px; width: 60px; display: flex; align-items: center;">
             <svg viewBox="0 -2 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>movie-recorder</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-206.000000, -519.000000)" fill="#ffffff"> <path d="M225,531.012 C222.232,531.012 219.989,528.768 219.989,526 C219.989,523.232 222.232,520.989 225,520.989 C227.768,520.989 230.011,523.232 230.011,526 C230.011,528.768 227.768,531.012 225,531.012 L225,531.012 Z M212,531 C209.791,531 208,529.209 208,527 C208,524.791 209.791,523 212,523 C214.209,523 216,524.791 216,527 C216,529.209 214.209,531 212,531 L212,531 Z M236,531 L230,535 C230,533.786 229.448,532.712 228.594,531.979 C230.626,530.753 232,528.546 232,526 C232,522.134 228.866,519 225,519 C221.134,519 218,522.134 218,526 C218,527.962 218.812,529.729 220.111,531 L216.443,531 C217.4,529.937 218,528.544 218,527 C218,523.687 215.313,521 212,521 C208.687,521 206,523.687 206,527 C206,528.809 206.816,530.41 208.082,531.511 C206.847,532.191 206,533.49 206,535 L206,543 C206,545.209 207.791,547 210,547 L226,547 C228.209,547 230,545.209 230,543 L236,547 C237.104,547 238,546.104 238,545 L238,533 C238,531.896 237.104,531 236,531 L236,531 Z" id="movie-recorder" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
         </div>
+
         <div class="name">
             <h1>MovieFinder</h1>
         </div>
@@ -20,29 +21,48 @@
     </div>
 
     <div class="content-about">
-        <div class="content-desc2">
-            <div class="proj-description">
-                <p>
-                    This is a Movie Recommendation project that provides personalized 
-                    movie recommendations to users. It utilizes a Flask-based front-end, 
-                    a custom-trained Language Model (LLM) recommendation system, the 
-                    <a class="link-api"
-                        href="https://rapidapi.com/SAdrian/api/moviesdatabase">
-                        MoviesDatabase accessed through RapidAPI </a> 
-                    
-                    and MongoDB to store user information from 
-                    Google OAuth. The project combines these technologies to 
-                    deliver a seamless movie recommendation experience.
-                </p>
-            </div>
-
-            <div class="get-started">
-                <a href="{{url_for('home')}}"> Get Started → </a>
-            </div>
+    <div class="content-desc">
+        <div class="proj-description">
+            <p>
+                This is a Movie Recommendation project that provides personalized 
+                movie recommendations to users. It utilizes a Flask-based front-end, 
+                a custom-trained Language Model (LLM) recommendation system, the 
+                <a class="link-api"
+                    href="https://rapidapi.com/SAdrian/api/moviesdatabase">
+                    MoviesDatabase accessed through RapidAPI </a> 
+                
+                and MongoDB to store user information from 
+                Google OAuth. The project combines these technologies to 
+                deliver a seamless movie recommendation experience.
+            </p>
         </div>
     </div>
 
+    <!-- this is modified Google's sign in button code -->
+    <div class="sign-in-button">
+    <p style="color: white;">Sign in to Get Started</p>
+    <a class="sign-in" href="{{url_for('googleLogin')}}">
+        <button class="gsi-material-button" style="width:300px">
+            <div class="gsi-material-button-state"></div>
+            <div class="gsi-material-button-content-wrapper">
+              <div class="gsi-material-button-icon">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                  <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                  <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                  <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                  <path fill="none" d="M0 0h48v48H0z"></path>
+                </svg>
+              </div>
+              <span class="gsi-material-button-contents">Continue with Google</span>
+              <span style="display: none;">Continue with Google</span>
+            </div>
+          </button>   
+    </a>
 
+    </div>
+
+    </div>
 
 </body>
 </html>
