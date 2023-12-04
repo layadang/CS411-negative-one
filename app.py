@@ -10,6 +10,7 @@ from pymongo.mongo_client import MongoClient
 
 # our other function:
 from info_get import *
+# from model_training.gpt import *
 
 app = Flask(__name__)
 
@@ -69,14 +70,15 @@ def home():
         if userinfo:
             given_name = userinfo['given_name']
         
-        titles = ["Iron Man", 
-                  "Good Will Hunting", 
-                  "Nefarious", 
-                  "Elf", 
-                  "Endgame", 
-                  "Inception", 
-                  "10 Things I Hate About You", 
-                  "Love Actually"]
+        titles = session.get('titles', ["Iron Man", 
+                                        "Good Will Hunting", 
+                                        "Nefarious", 
+                                        "Elf", 
+                                        "Endgame", 
+                                        "Inception", 
+                                        "10 Things I Hate About You", 
+                                        "Love Actually"])
+        session['titles'] = titles 
         
         current_movie_index = session.get('current_movie_index', 0)
 
@@ -102,19 +104,25 @@ def home():
         return render_template("not-signed-in.html", 
                                session=user_data)
 
+liked_movies = []
 # when checkmark button is clicked
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    # CHANGE THIS, theoretically many movies we dont need:
     total_movies = 8
-
-    # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
 
     session['current_movie_index'] = next_movie_index
-    
-    return redirect(url_for('home'))
+
+    # Retrieve titles from the session
+    titles = session.get('titles', [])
+
+    # Get the current movie title
+    current_movie_title = titles[current_movie_index]
+    liked_movies.append(current_movie_title)
+    print(liked_movies)
+
+    return redirect(url_for('home', current_movie_title=current_movie_title))
 
 @app.route("/dislike")
 def dislike():
