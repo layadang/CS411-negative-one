@@ -72,9 +72,9 @@ def home():
         titles = ["Iron Man", 
                   "Good Will Hunting", 
                   "Nefarious", 
-                  "Kill Switch", 
+                  "Elf", 
                   "Endgame", 
-                  "The Avengers", 
+                  "Inception", 
                   "10 Things I Hate About You", 
                   "Love Actually"]
         
@@ -99,7 +99,7 @@ def home():
     
     else:
         # user is not signed in:
-        return render_template("not_signed_in.html", 
+        return render_template("not-signed-in.html", 
                                session=user_data)
 
 # when checkmark button is clicked

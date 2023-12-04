@@ -28,6 +28,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    align-content: center;
     width: 100vw;
 }
 
@@ -96,12 +97,19 @@ a {
 
 .get-started {
     background-color: white;
+    width: 2000px;
+    height: 80px;
     border-radius: 25px;
-    font-size: 20pt;
+    font-size: 16pt;
     font-weight: 700;
-    padding: 10px 20px;
-    margin-top: 25px;
+    margin-left: 100px;
+    margin-right: 0;
+    padding: 0 0;
     transition: all .2s ease-in-out;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .get-started:hover {
@@ -111,7 +119,7 @@ a {
 .choice-box {
     height: 1000px;
     width: 50vw;
-    margin: 5vh 0 10vh 0 ;
+    margin: 2vh 0 5vh 0 ;
     border-radius: 25px;
 
     display: flex;
@@ -153,7 +161,7 @@ a {
 
 .choice-box button:hover {
     cursor: pointer;
-    transform: scale(1.2);
+    transform: scale(1.4);
 }
 
 .choice-box svg {
@@ -162,10 +170,28 @@ a {
 }
 
 .content-desc {
-    height: 70%;
+    height: 100%;
+    width: 66%;
+    margin-left: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content-desc2 {
+    height: 100%;
+    width: 80%;
+    margin-left: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content-about {
+    height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
 }
@@ -179,23 +205,36 @@ a {
 }
 
 .sign-in {
-    margin: 50px 0 0;
     transition: all .2s ease-in-out;
 }
 
 .sign-in:hover {
     transform: scale(1.2);
 }
+
+.sign-in-button {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .proj-description {
     background-color: white;
     font-size: 18pt;
     color: black;
-    margin: 0 250px 0;
     border-radius: 25px;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .proj-description p {
     margin: 20px 50px 20px;
+    line-height: 1.8;
+    text-align: center;
 }
 
 /* this is modified Google's sign in button code */
