@@ -6,7 +6,7 @@ import requests
 
 from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 
 app = Flask(__name__)
 
@@ -49,7 +49,7 @@ def register_user():
         "email": user_info.get("email"),
         # More fields can be added as needed
     }
-    registered_users.insert_one(user_data)
+    # registered_users.insert_one(user_data)
     return 'User registration successful', 200  # successful response
 
 @app.route("/")
@@ -64,8 +64,23 @@ def home():
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
         if userinfo:
-            given_name = userinfo['given_name']
-            register_user()
+            
+            name = userinfo['name']
+            email = userinfo['email']
+            
+            
+            # print("run to here")
+            
+            # user_info = request.json()
+            post = {
+                "_id": email,
+                "name": name
+                
+                # More fields can be added as needed
+            }
+            
+            registered_users.insert_one(post)
+            print('User registration successful', 200)  # successful response
 
 
     return render_template("index.html", session=user_data)
