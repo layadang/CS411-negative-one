@@ -63,8 +63,7 @@ def home():
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:
-            
+        if userinfo:            
             name = userinfo['name']
             email = userinfo['email']
             
@@ -81,8 +80,6 @@ def home():
             
             registered_users.insert_one(post)
             print('User registration successful', 200)  # successful response
-
-
     return render_template("index.html", session=user_data)
 
 
