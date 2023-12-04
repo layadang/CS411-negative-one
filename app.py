@@ -4,9 +4,9 @@ import os
 import json
 import requests
 
-from flask import Flask, abort, redirect, render_template, session, url_for
+from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 
 app = Flask(__name__)
 
@@ -29,35 +29,28 @@ oauth.register(
 )
 
 # MongoDB Atlas connection
-mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
-client = MongoClient(mongo_uri)
-db = client.TestCluster1
-registered_users = db.RegisteredUsers
+client = MongoClient(config.get("mongo_uri"))
+db = client["TestCluster1"]
+registered_users = db["RegisteredUsers"]
 
 @app.route('/register', methods=['POST'])
 def register_user():
     """
-    Endpoint to register a new user.
-    Expects 'first_name' and 'email' in the request body.
+    Endpoint for registering new users.
+    The request body should contain 'first_name' and 'email'.
     """
-    user_data = request.json
+    # Check if the Content-Type is 'application/json'
+    if request.content_type != 'application/json':
+        return 'Request must be in JSON format', 400
 
-    # Validate that both first_name and email are present in the request
-    if not user_data or 'first_name' not in user_data or 'email' not in user_data:
-        abort(400)  # Bad request
-
-    # Extract first_name and email from the request data
-    first_name = user_data['first_name']
-    email = user_data['email']
-
-    # Insert the new user data into the MongoDB collection
-    try:
-        registered_users.insert_one({"email": email, "first_name": first_name})
-    except:
-        abort(500)  # Internal server error
-
-    return '', 204  # No content response
-
+    user_info = request.json()
+    user_data = {
+        "name": user_info.get("name"),
+        "email": user_info.get("email"),
+        # More fields can be added as needed
+    }
+    # registered_users.insert_one(user_data)
+    return 'User registration successful', 200  # successful response
 
 @app.route("/")
 def home():
@@ -70,10 +63,23 @@ def home():
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:
-            given_name = userinfo['given_name']
-
-
+        if userinfo:            
+            name = userinfo['name']
+            email = userinfo['email']
+            
+            
+            # print("run to here")
+            
+            # user_info = request.json()
+            post = {
+                "_id": email,
+                "name": name
+                
+                # More fields can be added as needed
+            }
+            
+            registered_users.insert_one(post)
+            print('User registration successful', 200)  # successful response
     return render_template("index.html", session=user_data)
 
 
