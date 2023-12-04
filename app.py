@@ -66,9 +66,21 @@ def home():
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:
-            given_name = userinfo['given_name']
-        
+        if userinfo:            
+            name = userinfo['name']
+            email = userinfo['email']
+           
+            post = {
+                
+                "_id": email,
+                "name": name
+                
+                # Add like later
+            }
+            
+            registered_users.insert_one(post)
+            print('User registration successful', 200)  # successful response
+
         titles = ["Iron Man", 
                   "Good Will Hunting", 
                   "Nefarious", 
