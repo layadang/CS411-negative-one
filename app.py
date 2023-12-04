@@ -61,26 +61,37 @@ def register_user():
 
     return '', 204  # No content response
 
-
 @app.route("/")
 def home():
     user_data = session.get("user")
 
+    # user is signed in:
     if user_data:
         json_str = json.dumps(user_data)
         resp = json.loads(json_str)
-        print("hello")
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
         if userinfo:
             given_name = userinfo['given_name']
         
-        titles = ["The Hunger Games", "Spriggan", "Nefarious", "Kill Switch"]
+        titles = ["Iron Man", 
+                  "Good Will Hunting", 
+                  "Nefarious", 
+                  "Kill Switch", 
+                  "Endgame", 
+                  "The Avengers", 
+                  "10 Things I Hate About You", 
+                  "Love Actually"]
+        
         current_movie_index = session.get('current_movie_index', 0)
+
         title = titles[current_movie_index]
 
+        # call find_movie() function from info_get.py
         info = find_movie(title)
+
+        # need to implement skip on these if any of them are empty
         image_file = info[1]
         description = info[2]
         genres = info[3]
@@ -97,18 +108,36 @@ def home():
         return render_template("not_signed_in.html", 
                                session=user_data)
 
+# when checkmark button is clicked
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    # CHANGE THIS:
-    total_movies = 4 
+    # CHANGE THIS, theoretically many movies we dont need:
+    total_movies = 8
 
-    # Reset 0 if all movies reached?
+    # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
 
     session['current_movie_index'] = next_movie_index
-
+    
     return redirect(url_for('home'))
+
+@app.route("/dislike")
+def dislike():
+    current_movie_index = session.get('current_movie_index', 0)
+    # CHANGE THIS, theoretically many movies we dont need:
+    total_movies = 8
+
+    # Reset 0 if all movies reached
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+    
+    return redirect(url_for('home'))
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/signin-google")
 def googleCallback():

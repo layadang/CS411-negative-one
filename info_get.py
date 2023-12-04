@@ -17,11 +17,11 @@ def make_api_request(url, params, headers):
 
 
 def find_movie(title):
-
     movie_name = title.replace(" ", "%20")
     api_url = "https://moviesdatabase.p.rapidapi.com/titles/search/title/" + movie_name
     params = {
         'info': 'base_info',
+        'exact' :'true',
         'titleType': 'movie',
     }
 
@@ -39,6 +39,6 @@ def find_movie(title):
     return title, image_url, description, genres_str
 
 #print(find_movie("Nefarious"))
-# print(find_movie("The Hunger Games"))
+# print(find_movie("The Avengers"))
 
-find_movie("The Hunger Games")
+# find_movie("The Hunger Games")

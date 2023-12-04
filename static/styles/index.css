@@ -70,7 +70,7 @@ a {
     font-weight: 500;
 }
 
-.box .dropdown-content {
+.box .dropdown-content p {
     display: none; /* change to none for hover effect */
     z-index: -5;
     background-color: rgb(247, 247, 247);
@@ -78,24 +78,35 @@ a {
     color: black;
     width: 50%;
     text-align: center;
-    margin-top: 0;
-    height: 35px;
-    /* border: 1px solid; */
-    /* border-color: rgb(241, 241, 241); */
+    margin: 0 0 0;
+    padding: 10px 10px;
+    font-size: 10pt;
+    border: 1px solid;
+    border-color: rgb(225, 225, 225);
 }
 
-.box .dropdown-content p {
-    margin-top: 8px;
-    font-size: 10pt;
+.box:hover .dropdown-content p {
+    display: inline-block;
+
 }
 
 .box:hover {
     cursor: pointer;
 }
 
-.box:hover .dropdown-content {
-    display: inline-block;
-  }
+.get-started {
+    background-color: white;
+    border-radius: 25px;
+    font-size: 20pt;
+    font-weight: 700;
+    padding: 10px 20px;
+    margin-top: 25px;
+    transition: all .2s ease-in-out;
+}
+
+.get-started:hover {
+    transform: scale(1.2);
+}
 
 .choice-box {
     height: 1000px;
@@ -129,13 +140,13 @@ a {
 }
 
 .choice-box .buttons button {
-    width: 60px;
-    height: 60px;
-    background-color: var(--theme2);
+    width: 80px;
+    height: 80px;
+    background-color: white;
     border-radius: 100px;
     border: none;
     margin: 0 30px 0;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-size: 20pt;
     transition: all .2s ease-in-out;
 }
@@ -143,6 +154,11 @@ a {
 .choice-box button:hover {
     cursor: pointer;
     transform: scale(1.2);
+}
+
+.choice-box svg {
+    height: 100%;
+    width: 100%;
 }
 
 .content-desc {
@@ -172,6 +188,7 @@ a {
 }
 .proj-description {
     background-color: white;
+    font-size: 18pt;
     color: black;
     margin: 0 250px 0;
     border-radius: 25px;
@@ -191,8 +208,8 @@ a {
     color: #1f1f1f;
     cursor: pointer;
     font-family: 'Roboto', arial, sans-serif;
-    font-size: 14px;
-    height: 40px;
+    font-size: 16px;
+    height: 50px;
     letter-spacing: 0.25px;
     outline: none;
     overflow: hidden;
@@ -203,7 +220,7 @@ a {
     vertical-align: middle;
     white-space: nowrap;
     width: auto;
-    max-width: 400px;
+    max-width: 500px;
     min-width: min-content;
   }
   
