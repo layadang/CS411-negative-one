@@ -7,11 +7,12 @@ import json
 with open('secret/gpt.json', 'r') as config_file:
     config = json.load(config_file)
 
-client = config.get("gpt_api_key")
+client = OpenAI(api_key=config.get("gpt_api_key"))
+
+# Example list of movies
+test_list_of_movies = "1. Inception\n2. The Shawshank Redemption\n3. The Dark Knight\n4. Pulp Fiction\n5. The Godfather"
 
 def next_movies(list_of_movies):
-    # Example list of movies
-    # list_of_movies = "1. Inception\n2. The Shawshank Redemption\n3. The Dark Knight\n4. Pulp Fiction\n5. The Godfather"
     
     user_message = "A person likes these movies: " + list_of_movies + "; Can you recommend 10 different movies the person may also like? Only output a list with title of the movie and year in parenthesis behind the title."
 
@@ -36,3 +37,5 @@ def next_movies(list_of_movies):
 
     # Return the list of next movies
     return movies_list
+
+print(next_movies(test_list_of_movies))
