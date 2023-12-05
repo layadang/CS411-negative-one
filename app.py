@@ -10,6 +10,7 @@ from pymongo.mongo_client import MongoClient
 
 # our other function:
 from info_get import *
+# from model_training.gpt import *
 
 app = Flask(__name__)
 
@@ -55,6 +56,28 @@ def register_user():
     # registered_users.insert_one(user_data)
     return 'User registration successful', 200  # successful response
 
+top_20_movies = ["The Lion King",
+                 "The Super Mario Bros. Movie",
+                 "Avatar",
+                 "Spider-Man: No Way Home",
+                 "Legally Blonde",
+                 "Jurassic World",
+                 "Fast & Furious",
+                 "Top Gun: Maverick",
+                 "10 Things I Hate About You",
+                 "The Shining",
+                 "Frozen",
+                 "Titanic", 
+                 "Harry Potter and the Sorcerer's Stone",
+                 "Black Panther",
+                 "Love Actually",
+                 "The Incredibles",
+                 "Minions",
+                 "The Lord of the Rings: The Return of the King",
+                 "Mean Girls",
+                 "Midsommar"
+                 ]
+
 @app.route("/")
 def home():
     user_data = session.get("user")
@@ -66,6 +89,8 @@ def home():
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
+
+
         if userinfo:            
             name = userinfo['name']
             email = userinfo['email']
@@ -84,15 +109,10 @@ def home():
             else:
                  print('Welcome back', name)
             #registered_users.update_one(post, {"name": name}, upsert = True)
-
-        titles = ["Iron Man", 
-                  "Good Will Hunting", 
-                  "Nefarious", 
-                  "Elf", 
-                  "Endgame", 
-                  "Inception", 
-                  "10 Things I Hate About You", 
-                  "Love Actually"]
+            
+        session.pop('titles', None)
+        titles = session.get('titles', top_20_movies)
+        session['titles'] = titles 
         
         current_movie_index = session.get('current_movie_index', 0)
 
@@ -118,19 +138,26 @@ def home():
         return render_template("not-signed-in.html", 
                                session=user_data)
 
+liked_movies = []
 # when checkmark button is clicked
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    # CHANGE THIS, theoretically many movies we dont need:
-    total_movies = 8
-    
-    # Reset 0 if all movies reached
+    total_movies = 20
+
     next_movie_index = (current_movie_index + 1) % total_movies
 
     session['current_movie_index'] = next_movie_index
-    
-    return redirect(url_for('home'))
+
+    # Retrieve titles from the session
+    titles = session.get('titles', [])
+
+    # Get the current movie title
+    current_movie_title = titles[current_movie_index]
+    liked_movies.append(current_movie_title)
+    print(liked_movies)
+
+    return redirect(url_for('home', current_movie_title=current_movie_title))
 
 @app.route("/dislike")
 def dislike():

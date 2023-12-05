@@ -24,7 +24,7 @@ def find_movie(title):
     api_url = "https://moviesdatabase.p.rapidapi.com/titles/search/title/" + movie_name
     params = {
         'info': 'base_info',
-        'exact' :'true',
+        'exact': 'true',
         'titleType': 'movie',
     }
 
