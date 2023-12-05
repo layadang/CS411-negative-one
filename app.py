@@ -37,25 +37,6 @@ client = MongoClient(config.get("mongo_uri"))
 db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
-@app.route('/register', methods=['POST'])
-def register_user():
-    """
-    Endpoint for registering new users.
-    The request body should contain 'first_name' and 'email'.
-    """
-    # Check if the Content-Type is 'application/json'
-    if request.content_type != 'application/json':
-        return 'Request must be in JSON format', 400
-
-    user_info = request.json()
-    user_data = {
-        "name": user_info.get("name"),
-        "email": user_info.get("email"),
-        # More fields can be added as needed
-    }
-    # registered_users.insert_one(user_data)
-    return 'User registration successful', 200  # successful response
-
 top_20_movies = ["The Lion King",
                  "The Super Mario Bros. Movie",
                  "Avatar",
