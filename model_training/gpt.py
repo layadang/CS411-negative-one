@@ -1,12 +1,13 @@
 import os
 from openai import OpenAI
-from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
 import re
+import json
 
-load_dotenv(Path(".env"))
+with open('secret/gpt.json', 'r') as config_file:
+    config = json.load(config_file)
 
-client = OpenAI(api_key=os.getenv("gpt_api_key"))
+client = config.get("gpt_api_key")
 
 def next_movies(list_of_movies):
     # Example list of movies
