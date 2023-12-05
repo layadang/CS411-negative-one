@@ -77,9 +77,13 @@ def home():
                 
                 # Add like later
             }
-            
-            registered_users.insert_one(post)
-            print('User registration successful', 200)  # successful response
+            num = registered_users.find_one({"_id": email})
+            if num == None:
+                 registered_users.insert_one(post)
+                 print('User registration successful', 200)  # successful response
+            else:
+                 print('Welcome back', name)
+            #registered_users.update_one(post, {"name": name}, upsert = True)
 
         titles = ["Iron Man", 
                   "Good Will Hunting", 
@@ -120,7 +124,7 @@ def like():
     current_movie_index = session.get('current_movie_index', 0)
     # CHANGE THIS, theoretically many movies we dont need:
     total_movies = 8
-
+    
     # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
 
