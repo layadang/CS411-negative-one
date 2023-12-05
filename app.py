@@ -89,9 +89,27 @@ def home():
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:
-            given_name = userinfo['given_name']
 
+
+        if userinfo:            
+            name = userinfo['name']
+            email = userinfo['email']
+           
+            post = {
+                
+                "_id": email,
+                "name": name
+                
+                # Add like later
+            }
+            num = registered_users.find_one({"_id": email})
+            if num == None:
+                 registered_users.insert_one(post)
+                 print('User registration successful', 200)  # successful response
+            else:
+                 print('Welcome back', name)
+            #registered_users.update_one(post, {"name": name}, upsert = True)
+            
         session.pop('titles', None)
         titles = session.get('titles', top_20_movies)
         session['titles'] = titles 
@@ -99,7 +117,6 @@ def home():
         current_movie_index = session.get('current_movie_index', 0)
 
         title = titles[current_movie_index]
-        print(title)
 
         # call find_movie() function from info_get.py
         info = find_movie(title)
@@ -127,6 +144,7 @@ liked_movies = []
 def like():
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 20
+
     next_movie_index = (current_movie_index + 1) % total_movies
 
     session['current_movie_index'] = next_movie_index
