@@ -37,6 +37,7 @@ client = MongoClient(config.get("mongo_uri"))
 db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
+# Default initial list:
 top_20_movies = ["The Lion King",
                  "The Super Mario Bros. Movie",
                  "Avatar",
@@ -59,6 +60,7 @@ top_20_movies = ["The Lion King",
                  "Midsommar"
                  ]
 
+# MAIN PAGE:
 @app.route("/")
 def home():
     user_data = session.get("user")
@@ -71,16 +73,13 @@ def home():
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
 
-
         if userinfo:            
             name = userinfo['name']
             email = userinfo['email']
            
             post = {
-                
                 "_id": email,
                 "name": name
-                
                 # Add like later
             }
             num = registered_users.find_one({"_id": email})
@@ -89,9 +88,10 @@ def home():
                  print('User registration successful', 200)  # successful response
             else:
                  print('Welcome back', name)
-            #registered_users.update_one(post, {"name": name}, upsert = True)
+            # registered_users.update_one(post, {"name": name}, upsert = True)
             
-        session.pop('titles', None)
+        # resets the titles list they already gone through
+        session.pop('titles', None) 
         titles = session.get('titles', top_20_movies)
         session['titles'] = titles 
         
@@ -119,12 +119,12 @@ def home():
         return render_template("not-signed-in.html", 
                                session=user_data)
 
+# HEART BUTTON CLICKED:
 liked_movies = []
-# when checkmark button is clicked
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 20
+    total_movies = 20 # temp to reset list after user gone thru 20
 
     next_movie_index = (current_movie_index + 1) % total_movies
 
@@ -140,11 +140,11 @@ def like():
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
+# X BUTTON CLICKED
 @app.route("/dislike")
 def dislike():
     current_movie_index = session.get('current_movie_index', 0)
-    # CHANGE THIS, theoretically many movies we dont need:
-    total_movies = 8
+    total_movies = 20 # temp to reset list after user gone thru 20
 
     # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
@@ -153,10 +153,12 @@ def dislike():
     
     return redirect(url_for('home'))
 
+# ABOUT PAGE
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+# OAUTH SETUP:
 @app.route("/signin-google")
 def googleCallback():
     # fetch access token and id token using authorization code
@@ -184,6 +186,7 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
+# Function to run
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=config.get(
         "FLASK_PORT"), debug=True)
