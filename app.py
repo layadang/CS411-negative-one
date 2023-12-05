@@ -6,7 +6,11 @@ import requests
 
 from flask import Flask, abort, redirect, render_template, session, url_for, request
 from authlib.integrations.flask_client import OAuth
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+
+# our other function:
+from info_get import *
+# from model_training.gpt import *
 
 app = Flask(__name__)
 
@@ -29,48 +33,153 @@ oauth.register(
 )
 
 # MongoDB Atlas connection
-mongo_uri = "mongodb+srv://CS411ProjectDatabase:negativeone@testcluster1.gfaawrr.mongodb.net/?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
-client = MongoClient(mongo_uri)
+client = MongoClient(config.get("mongo_uri"))
 db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
 @app.route('/register', methods=['POST'])
 def register_user():
     """
-    注册新用户的端点。
-    请求体中应包含 'first_name' 和 'email'。
+    Endpoint for registering new users.
+    The request body should contain 'first_name' and 'email'.
     """
     # Check if the Content-Type is 'application/json'
     if request.content_type != 'application/json':
-        return '请求必须是 JSON 格式', 400
+        return 'Request must be in JSON format', 400
 
     user_info = request.json()
     user_data = {
         "name": user_info.get("name"),
         "email": user_info.get("email"),
-        # 可以根据需要添加更多字段
+        # More fields can be added as needed
     }
-    registered_users.insert_one(user_data)
-    return '用户注册成功', 200  # 成功响应
+    # registered_users.insert_one(user_data)
+    return 'User registration successful', 200  # successful response
+
+top_20_movies = ["The Lion King",
+                 "The Super Mario Bros. Movie",
+                 "Avatar",
+                 "Spider-Man: No Way Home",
+                 "Legally Blonde",
+                 "Jurassic World",
+                 "Fast & Furious",
+                 "Top Gun: Maverick",
+                 "10 Things I Hate About You",
+                 "The Shining",
+                 "Frozen",
+                 "Titanic", 
+                 "Harry Potter and the Sorcerer's Stone",
+                 "Black Panther",
+                 "Love Actually",
+                 "The Incredibles",
+                 "Minions",
+                 "The Lord of the Rings: The Return of the King",
+                 "Mean Girls",
+                 "Midsommar"
+                 ]
 
 @app.route("/")
 def home():
     user_data = session.get("user")
 
+    # user is signed in:
     if user_data:
         json_str = json.dumps(user_data)
         resp = json.loads(json_str)
-        print("hello")
         
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:
-            given_name = userinfo['given_name']
-            register_user()
 
 
-    return render_template("index.html", session=user_data)
+        if userinfo:            
+            name = userinfo['name']
+            email = userinfo['email']
+           
+            post = {
+                
+                "_id": email,
+                "name": name
+                
+                # Add like later
+            }
+            num = registered_users.find_one({"_id": email})
+            if num == None:
+                 registered_users.insert_one(post)
+                 print('User registration successful', 200)  # successful response
+            else:
+                 print('Welcome back', name)
+            #registered_users.update_one(post, {"name": name}, upsert = True)
+            
+        session.pop('titles', None)
+        titles = session.get('titles', top_20_movies)
+        session['titles'] = titles 
+        
+        current_movie_index = session.get('current_movie_index', 0)
 
+        title = titles[current_movie_index]
+
+        # call find_movie() function from info_get.py
+        info = find_movie(title)
+
+        # need to implement skip on these if any of them are empty
+        image_file = info[1]
+        description = info[2]
+        genres = info[3]
+
+        return render_template("index.html", 
+                               session=user_data,
+                               title=title,
+                               image_file=image_file,
+                               description=description,
+                               genres=genres)
+    
+    else:
+        # user is not signed in:
+        return render_template("not-signed-in.html", 
+                               session=user_data)
+
+liked_movies = []
+# when checkmark button is clicked
+@app.route("/like")
+def like():
+    current_movie_index = session.get('current_movie_index', 0)
+    email = session.get("email")
+    total_movies = 20
+
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+
+    # Retrieve titles from the session
+    titles = session.get('titles', [])
+    
+    # Get the current movie title
+    current_movie_title = titles[current_movie_index]
+    liked_movies.append(current_movie_title)
+    print(liked_movies)
+    registered_users.update_one({ "_id": email},{ "$set": {"liked": liked_movies}}
+    )
+    print(liked_movies)
+    
+
+    return redirect(url_for('home', current_movie_title=current_movie_title))
+
+@app.route("/dislike")
+def dislike():
+    current_movie_index = session.get('current_movie_index', 0)
+    # CHANGE THIS, theoretically many movies we dont need:
+    total_movies = 8
+
+    # Reset 0 if all movies reached
+    next_movie_index = (current_movie_index + 1) % total_movies
+
+    session['current_movie_index'] = next_movie_index
+    
+    return redirect(url_for('home'))
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/signin-google")
 def googleCallback():
@@ -102,3 +211,11 @@ def logout():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=config.get(
         "FLASK_PORT"), debug=True)
+    
+# a helper function to convert email into unique ascii codes in order to compare equality
+def convert_into_id(s):
+    ascii_values = [str(ord(c)) for c in s]
+    result = ''
+    for i in ascii_values:
+        result += i
+    return(int(result))
