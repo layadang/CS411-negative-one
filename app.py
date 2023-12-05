@@ -56,6 +56,28 @@ def register_user():
     # registered_users.insert_one(user_data)
     return 'User registration successful', 200  # successful response
 
+top_20_movies = ["The Lion King",
+                 "The Super Mario Bros. Movie",
+                 "Avatar",
+                 "Spider-Man: No Way Home",
+                 "Legally Blonde",
+                 "Jurassic World",
+                 "Fast & Furious",
+                 "Top Gun: Maverick",
+                 "10 Things I Hate About You",
+                 "The Shining",
+                 "Frozen",
+                 "Titanic", 
+                 "Harry Potter and the Sorcerer's Stone",
+                 "Black Panther",
+                 "Love Actually",
+                 "The Incredibles",
+                 "Minions",
+                 "The Lord of the Rings: The Return of the King",
+                 "Mean Girls",
+                 "Midsommar"
+                 ]
+
 @app.route("/")
 def home():
     user_data = session.get("user")
@@ -69,20 +91,15 @@ def home():
         userinfo = resp.get('userinfo')
         if userinfo:
             given_name = userinfo['given_name']
-        
-        titles = session.get('titles', ["Iron Man", 
-                                        "Good Will Hunting", 
-                                        "Nefarious", 
-                                        "Elf", 
-                                        "Endgame", 
-                                        "Inception", 
-                                        "10 Things I Hate About You", 
-                                        "Love Actually"])
+
+        session.pop('titles', None)
+        titles = session.get('titles', top_20_movies)
         session['titles'] = titles 
         
         current_movie_index = session.get('current_movie_index', 0)
 
         title = titles[current_movie_index]
+        print(title)
 
         # call find_movie() function from info_get.py
         info = find_movie(title)
@@ -109,7 +126,7 @@ liked_movies = []
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 8
+    total_movies = 20
     next_movie_index = (current_movie_index + 1) % total_movies
 
     session['current_movie_index'] = next_movie_index
