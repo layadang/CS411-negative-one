@@ -44,10 +44,14 @@ def find_movie(title):
         description = res['results'][0]['plot']['plotText']['plainText']
     except TypeError as e:
         description = ""
+    except IndexError as e:
+        description = ""
     try:
         genres = res['results'][0]['genres']['genres']
         genres_str = ', '.join([genre['text'] for genre in genres])
     except TypeError as e:
+        genres_str = ""
+    except IndexError as e:
         genres_str = ""
 
     return title, image_url, description, genres_str
