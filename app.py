@@ -54,6 +54,9 @@ top_10_movies = [
 # MAIN PAGE:
 @app.route("/")
 def home():
+    global email
+    global image_file
+    email = ""
     user_data = session.get("user")
 
     # user is signed in:
@@ -86,7 +89,6 @@ def home():
         current_movie_index = session.get('current_movie_index', 0)
 
         title = titles[current_movie_index]
-        print(titles)
         # call find_movie() function from info_get.py
         info = find_movie(title)
 
@@ -130,8 +132,6 @@ def like():
         titles = session.get('titles', [])
 
     session['current_movie_index'] = next_movie_index
-
-    print(titles)
     
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
@@ -166,6 +166,38 @@ def dislike():
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
     disliked_movies.append(current_movie_title)
+    return redirect(url_for('home', current_movie_title=current_movie_title))
+
+@app.route("/add")
+def add():
+    global top_10_movies
+    global liked_movies
+    global disliked_movies
+
+    current_movie_index = session.get('current_movie_index', 0)
+    total_movies = 11  # to reset list
+
+    next_movie_index = (current_movie_index + 1) % (total_movies-1)
+
+    if (next_movie_index == 0):
+        unfilter_movies = next_movies(", ".join(liked_movies), ", ".join(disliked_movies))
+        # Ensure that next_movies returns a list of dictionaries with 'title' as one of the keys
+        top_10_movies = [movie['title'] for movie in unfilter_movies]
+        titles = top_10_movies
+    else:
+        # Retrieve titles from the session
+        titles = session.get('titles', [])
+
+    session['current_movie_index'] = next_movie_index
+    
+
+    # Get the current movie title
+    current_movie_title = titles[current_movie_index]
+
+    print("user email is " + email)
+    print("added  movie is " + current_movie_title)
+    print("image url " + image_file)
+
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
 # ABOUT PAGE
