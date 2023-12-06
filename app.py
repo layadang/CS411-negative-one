@@ -191,6 +191,7 @@ def add():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -258,6 +259,23 @@ def clear_user_data():
         return f"Data cleared for user {email}", 200
     else:
         return f"No changes made for user {email} (user not found or data already cleared)", 404
+
+@app.route('/undo_last_liked')
+def undo_last_liked():
+    # Assume the most recently added item is sent in the request
+    # For example, {"last_liked": "Some Item"}
+    
+    # Use $pull to remove the item from the 'liked' array
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$pull": {"toWatchLater": current_movie_title}}
+    )
+
+    if result.modified_count:
+        return f"Last liked item '{current_movie_title}' removed for user {email}", 200
+    else:
+        return f"No changes made for user {email} (item not found or already removed)", 404
+    
     
 # ABOUT PAGE
 @app.route("/about")
