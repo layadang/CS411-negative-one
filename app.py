@@ -153,7 +153,7 @@ def like():
 @app.route("/dislike")
 def dislike():
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 10 # temp to reset list after user gone thru 20
+    total_movies = 11 # temp to reset list after user gone thru 20
 
     # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
