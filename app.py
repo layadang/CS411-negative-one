@@ -58,6 +58,16 @@ top_10_movies = ["The Lion King",
                  "The Lord of the Rings: The Return of the King",
                  "Mean Girls",
                  "Midsommar"
+                 "Frozen",
+                 "Titanic", 
+                 "Harry Potter and the Sorcerer's Stone",
+                 "Black Panther",
+                 "Love Actually",
+                 "The Incredibles",
+                 "Minions",
+                 "The Lord of the Rings: The Return of the King",
+                 "Mean Girls",
+                 "Midsommar"
                  ]
 
 # MAIN PAGE:
@@ -160,6 +170,7 @@ def dislike():
     global disliked_movies
 
     current_movie_index = session.get('current_movie_index', 0)
+    total_movies = 11  # temp to reset list after user gone thru 20
     total_movies = 11  # temp to reset list after user gone thru 20
 
     next_movie_index = (current_movie_index + 1) % (total_movies-1)
