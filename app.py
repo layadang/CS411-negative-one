@@ -58,7 +58,9 @@ def home():
     global image_file
     email = ""
     user_data = session.get("user")
+    global email
 
+    email = ""
     # user is signed in:
     if user_data:
         json_str = json.dumps(user_data)
@@ -97,6 +99,7 @@ def home():
         description = info[2]
         genres = info[3]
 
+        print("home email is " + str(email))
         return render_template("index.html", 
                                session=user_data,
                                title=title,
@@ -116,7 +119,7 @@ def like():
     global top_10_movies
     global liked_movies
     global disliked_movies
-
+    
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
 
@@ -136,7 +139,8 @@ def like():
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
     liked_movies.append(current_movie_title)
-
+    print(current_movie_title)
+    registered_users.update_one({ "_id": email},{ "$push": {"liked": current_movie_title}})
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
 # X BUTTON CLICKED
