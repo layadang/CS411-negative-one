@@ -18,15 +18,34 @@ def make_api_request(url, params, headers):
         print(f"Error making API request: {e}")
         return None
 
+# hardcoding in incorrect movie info that the api gets
+# realistically - api should have a sort by most popular option...
+# not implementing search movie+year (we don't trust GPT to return correct year most of the time)
 
 def find_movie(title):
+    if (title == "500 Days of Summer"):
+        title = "(500) Days of Summer" # (good movie <3)
+    
     movie_name = title.replace(" ", "%20")
     api_url = "https://moviesdatabase.p.rapidapi.com/titles/search/title/" + movie_name
+
     params = {
         'info': 'base_info',
         'exact': 'true',
         'titleType': 'movie',
     }
+
+    # found these errors while manually testing
+    if (title == "Tangled"):
+        params['year'] = '2010'
+    if (title == "Beauty and the Beast"):
+        params['year'] = '1991'
+    if (title == "Clueless"):
+        params['year'] = '1995'
+    if (title == "Her"):
+        params['year'] = '2013'
+    if (title == "Coco"):
+        params['year'] = '2017'
 
     headers = {
         "X-RapidAPI-Key": api.get("laya-Key"),
@@ -56,7 +75,4 @@ def find_movie(title):
 
     return title, image_url, description, genres_str
 
-#print(find_movie("Nefarious"))
-# print(find_movie("The Avengers"))
-
-# find_movie("The Hunger Games")
+# print(find_movie("Beauty and the Beast"))

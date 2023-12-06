@@ -38,36 +38,17 @@ db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
 # Default initial list:
-top_10_movies = ["The Lion King",
-                 "The Super Mario Bros. Movie",
-                 "Avatar",
-                 "Spider-Man: No Way Home",
-                 "Legally Blonde",
-                 "Jurassic World",
-                 "Fast & Furious",
-                 "Top Gun: Maverick",
-                 "10 Things I Hate About You",
-                 "The Shining",
-                 "Frozen",
-                 "Titanic", 
-                 "Harry Potter and the Sorcerer's Stone",
-                 "Black Panther",
-                 "Love Actually",
-                 "The Incredibles",
-                 "Minions",
-                 "The Lord of the Rings: The Return of the King",
-                 "Mean Girls",
-                 "Midsommar"
-                 "Frozen",
-                 "Titanic", 
-                 "Harry Potter and the Sorcerer's Stone",
-                 "Black Panther",
-                 "Love Actually",
-                 "The Incredibles",
-                 "Minions",
-                 "The Lord of the Rings: The Return of the King",
-                 "Mean Girls",
-                 "Midsommar"
+top_10_movies = [
+                "Everything Everywhere All at Once",   # Action/Sci-fi
+                "La La Land",                          # Romance/Musical
+                "Inception",                           # Sci-fi
+                "Spider-Man: No Way Home",             # Marvel
+                "Legally Blonde",                      # Comedy
+                "The Shining",                         # Horror
+                "Fast & Furious",                      # Action/Crime
+                "Toy Story",                           # Animation
+                "Love Actually",                       # Romance                   
+                "Get Out"                              # Horror/Comedy
                  ]
 
 # MAIN PAGE:
@@ -79,10 +60,8 @@ def home():
     if user_data:
         json_str = json.dumps(user_data)
         resp = json.loads(json_str)
-        
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-
         if userinfo:            
             name = userinfo['name']
             email = userinfo['email']
@@ -95,9 +74,8 @@ def home():
             num = registered_users.find_one({"_id": email})
             if num == None:
                  registered_users.insert_one(post)
-                 print('User registration successful', 200)  # successful response
-            else:
-                 print('Welcome back', name)
+                #  print('User registration successful', 200)  # successful response
+                
             # registered_users.update_one(post, {"name": name}, upsert = True)
             
         # resets the titles list they already gone through
@@ -108,11 +86,11 @@ def home():
         current_movie_index = session.get('current_movie_index', 0)
 
         title = titles[current_movie_index]
-
+        print(titles)
         # call find_movie() function from info_get.py
         info = find_movie(title)
 
-        # need to implement skip on these if any of them are empty
+        # need to implement skip on these if any of them are empty string
         image_file = info[1]
         description = info[2]
         genres = info[3]
@@ -138,7 +116,7 @@ def like():
     global disliked_movies
 
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 11  # temp to reset list after user gone thru 20
+    total_movies = 11  # to reset list
 
     next_movie_index = (current_movie_index + 1) % (total_movies-1)
 
@@ -170,8 +148,7 @@ def dislike():
     global disliked_movies
 
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 11  # temp to reset list after user gone thru 20
-    total_movies = 11  # temp to reset list after user gone thru 20
+    total_movies = 11  # to reset list
 
     next_movie_index = (current_movie_index + 1) % (total_movies-1)
 
@@ -185,8 +162,6 @@ def dislike():
         titles = session.get('titles', [])
 
     session['current_movie_index'] = next_movie_index
-
-    print(titles)
     
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
