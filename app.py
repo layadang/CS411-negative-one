@@ -10,7 +10,7 @@ from pymongo.mongo_client import MongoClient
 
 # our other function:
 from info_get import *
-# from model_training.gpt import *
+from model_training.gpt import *
 
 app = Flask(__name__)
 
@@ -48,16 +48,16 @@ top_20_movies = ["The Lion King",
                  "Top Gun: Maverick",
                  "10 Things I Hate About You",
                  "The Shining",
-                 "Frozen",
-                 "Titanic", 
-                 "Harry Potter and the Sorcerer's Stone",
-                 "Black Panther",
-                 "Love Actually",
-                 "The Incredibles",
-                 "Minions",
-                 "The Lord of the Rings: The Return of the King",
-                 "Mean Girls",
-                 "Midsommar"
+                 "Frozen"
+                #  "Titanic", 
+                #  "Harry Potter and the Sorcerer's Stone",
+                #  "Black Panther",
+                #  "Love Actually",
+                #  "The Incredibles",
+                #  "Minions",
+                #  "The Lord of the Rings: The Return of the King",
+                #  "Mean Girls",
+                #  "Midsommar"
                  ]
 
 # MAIN PAGE:
@@ -124,9 +124,12 @@ liked_movies = []
 @app.route("/like")
 def like():
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 20 # temp to reset list after user gone thru 20
-
+    total_movies = 9 # temp to reset list after user gone thru 20
+    
     next_movie_index = (current_movie_index + 1) % total_movies
+
+    if (current_movie_index >= 9) and (current_movie_index % 9 == 0):
+        next_movies(", ".join(liked_movies))
 
     session['current_movie_index'] = next_movie_index
 
@@ -135,8 +138,9 @@ def like():
 
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
+    print(titles[current_movie_title])
     liked_movies.append(current_movie_title)
-    print(liked_movies)
+    #  print(liked_movies)
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
@@ -144,7 +148,7 @@ def like():
 @app.route("/dislike")
 def dislike():
     current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 20 # temp to reset list after user gone thru 20
+    total_movies = 10 # temp to reset list after user gone thru 20
 
     # Reset 0 if all movies reached
     next_movie_index = (current_movie_index + 1) % total_movies
