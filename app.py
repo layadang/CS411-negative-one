@@ -58,7 +58,6 @@ def home():
     global image_file
     email = ""
     user_data = session.get("user")
-    global email
 
     email = ""
     # user is signed in:
@@ -99,13 +98,26 @@ def home():
         description = info[2]
         genres = info[3]
 
+        # addedToWatch = registered_users.aggregate({ "$match": {"_id": email}}, {"$project" : {"_id": 0, "toWatchLater": 1}})
+        # addedToWatch = registered_users.find( {"_id": email }, {"toWatchLater": 1,})
+        document = registered_users.find_one({"_id": "jhzhang@bu.edu"})
+        to_watch_later = document.get('toWatchLater', [])
+        url = document.get('imageURL', [])
+        # Ensure it is a list of strings
+        if isinstance(to_watch_later, list):
+            print("To Watch Later:", to_watch_later)
+            print("URL:", url)
+        else:
+            print("The 'toWatchLater' field is not in the expected format.")
         print("home email is " + str(email))
         return render_template("index.html", 
                                session=user_data,
                                title=title,
                                image_file=image_file,
                                description=description,
-                               genres=genres)
+                               genres=genres,
+                               addedToWatch=str(to_watch_later),
+                               url = str(url))
     
     else:
         # user is not signed in:
@@ -170,6 +182,8 @@ def dislike():
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
     disliked_movies.append(current_movie_title)
+    print(current_movie_title)
+    registered_users.update_one({ "_id": email},{ "$push": {"disliked": current_movie_title}})
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
 @app.route("/add")
@@ -201,6 +215,7 @@ def add():
     print("user email is " + email)
     print("added  movie is " + current_movie_title)
     print("image url " + image_file)
+    registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file}})
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
