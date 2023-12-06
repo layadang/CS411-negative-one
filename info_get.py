@@ -35,12 +35,17 @@ def find_movie(title):
         'titleType': 'movie',
     }
 
+    # found these errors while manually testing
     if (title == "Tangled"):
         params['year'] = '2010'
     if (title == "Beauty and the Beast"):
         params['year'] = '1991'
     if (title == "Clueless"):
         params['year'] = '1995'
+    if (title == "Her"):
+        params['year'] = '2013'
+    if (title == "Coco"):
+        params['year'] = '2017'
 
     headers = {
         "X-RapidAPI-Key": api.get("laya-Key"),
