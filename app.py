@@ -58,7 +58,6 @@ def home():
     global image_file
     email = ""
     user_data = session.get("user")
-    global email
 
     email = ""
     # user is signed in:
