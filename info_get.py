@@ -34,10 +34,21 @@ def find_movie(title):
     }
 
     res = make_api_request(api_url, params, headers)
-    image_url = res['results'][0]['primaryImage']['url']
-    description = res['results'][0]['plot']['plotText']['plainText']
-    genres = res['results'][0]['genres']['genres']
-    genres_str = ', '.join([genre['text'] for genre in genres])
+    try: 
+        image_url = res['results'][0]['primaryImage']['url']
+    except TypeError as e:
+        image_url = ""
+    except IndexError as e:
+        image_url = ""
+    try:
+        description = res['results'][0]['plot']['plotText']['plainText']
+    except TypeError as e:
+        description = ""
+    try:
+        genres = res['results'][0]['genres']['genres']
+        genres_str = ', '.join([genre['text'] for genre in genres])
+    except TypeError as e:
+        genres_str = ""
 
     return title, image_url, description, genres_str
 

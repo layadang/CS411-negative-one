@@ -38,7 +38,7 @@ db = client["TestCluster1"]
 registered_users = db["RegisteredUsers"]
 
 # Default initial list:
-top_20_movies = ["The Lion King",
+top_10_movies = ["The Lion King",
                  "The Super Mario Bros. Movie",
                  "Avatar",
                  "Spider-Man: No Way Home",
@@ -92,7 +92,7 @@ def home():
             
         # resets the titles list they already gone through
         session.pop('titles', None) 
-        titles = session.get('titles', top_20_movies)
+        titles = session.get('titles', top_10_movies)
         session['titles'] = titles 
         
         current_movie_index = session.get('current_movie_index', 0)
@@ -123,24 +123,29 @@ def home():
 liked_movies = []
 @app.route("/like")
 def like():
-    current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 9 # temp to reset list after user gone thru 20
-    
-    next_movie_index = (current_movie_index + 1) % total_movies
+    global top_10_movies
 
-    if (current_movie_index >= 9) and (current_movie_index % 9 == 0):
-        next_movies(", ".join(liked_movies))
+    current_movie_index = session.get('current_movie_index', 0)
+    total_movies = 11  # temp to reset list after user gone thru 20
+
+    next_movie_index = (current_movie_index + 1) % (total_movies-1)
+
+    if (next_movie_index == 0):
+        unfilter_movies = next_movies(", ".join(liked_movies))
+        # Ensure that next_movies returns a list of dictionaries with 'title' as one of the keys
+        top_10_movies = [movie['title'] for movie in unfilter_movies]
+        titles = top_10_movies
+    else:
+        # Retrieve titles from the session
+        titles = session.get('titles', [])
 
     session['current_movie_index'] = next_movie_index
 
-    # Retrieve titles from the session
-    titles = session.get('titles', [])
-
+    print(titles)
+    
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
-    print(titles[current_movie_title])
     liked_movies.append(current_movie_title)
-    #  print(liked_movies)
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
