@@ -100,7 +100,7 @@ def home():
 
         # addedToWatch = registered_users.aggregate({ "$match": {"_id": email}}, {"$project" : {"_id": 0, "toWatchLater": 1}})
         # addedToWatch = registered_users.find( {"_id": email }, {"toWatchLater": 1,})
-        document = registered_users.find_one({"_id": "jhzhang@bu.edu"})
+        document = registered_users.find_one({"_id": email})
         to_watch_later = document.get('toWatchLater', [])
         url = document.get('imageURL', [])
         # Ensure it is a list of strings
@@ -131,6 +131,7 @@ def like():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
     
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -162,6 +163,7 @@ def dislike():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -191,6 +193,7 @@ def add():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -215,10 +218,108 @@ def add():
     print("user email is " + email)
     print("added  movie is " + current_movie_title)
     print("image url " + image_file)
-    registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file}})
+    registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file, "liked": current_movie_title}})
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
+# adding a feature for clear the to watch later list
+@app.route('/clear_to_watch_later')
+def clear_to_watch_later():
+    # Update the document to clear the 'toWatchLater' field
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"toWatchLater": [], "imageURL": []}}
+    )
+
+    if result.modified_count:
+        return f"To Watch Later list cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or list already empty)", 404
+    
+@app.route('/clear_likes_dislikes')
+def clear_likes_dislikes():
+    # Update the document to clear the 'liked' and 'disliked' fields
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"liked": [], "disliked": []}}
+    )
+
+    if result.modified_count:
+        return f"'Liked' and 'Disliked' lists cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or lists already empty)", 404
+
+@app.route('/clear_user_data')
+def clear_user_data():
+    # Update the document to clear the 'liked', 'disliked', 'toWatchLater', and 'imageURL' fields
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"liked": [], "disliked": [], "toWatchLater": [], "imageURL": []}}
+    )
+
+    if result.modified_count:
+        return f"Data cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or data already cleared)", 404
+
+@app.route('/undo_last_liked')
+def undo_last_liked():
+    # Assume the most recently added item is sent in the request
+    # For example, {"last_liked": "Some Item"}
+    
+    # Use $pull to remove the item from the 'liked' array
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$pull": {"toWatchLater": current_movie_title}}
+    )
+
+    if result.modified_count:
+        return f"Last liked item '{current_movie_title}' removed for user {email}", 200
+    else:
+        return f"No changes made for user {email} (item not found or already removed)", 404
+    
+@app.route('/switch_like_dislike')
+def switch_like_dislike():
+    # Assume the current movie title is sent in the request
+    # For example, {"current_movie_title": "Some Movie"}
+    
+    query = {"_id": email, "liked": {"$in": [current_movie_title]}}
+    document = registered_users.find_one(query)
+    print(document)
+    print(bool(document))
+    if bool(document):
+        # Remove the movie from the 'liked' array
+        registered_users.update_one(
+            {"_id": email},
+            {"$pull": {"liked": current_movie_title}}
+        )
+
+        # Add the movie to the 'disliked' array
+        result = registered_users.update_one(
+            {"_id": email},
+            {"$push": {"disliked": current_movie_title}}
+        )
+
+        if result.modified_count:
+            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+        else:
+            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
+    else:
+        registered_users.update_one(
+            {"_id": email},
+            {"$pull": {"disliked": current_movie_title}}
+        )
+
+        # Add the movie to the 'disliked' array
+        result = registered_users.update_one(
+            {"_id": email},
+            {"$push": {"liked": current_movie_title}}
+        )
+        if result.modified_count:
+            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+        else:
+            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
+    
 # ABOUT PAGE
 @app.route("/about")
 def about():
