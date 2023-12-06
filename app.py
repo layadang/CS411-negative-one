@@ -48,16 +48,16 @@ top_10_movies = ["The Lion King",
                  "Top Gun: Maverick",
                  "10 Things I Hate About You",
                  "The Shining",
-                 "Frozen"
-                #  "Titanic", 
-                #  "Harry Potter and the Sorcerer's Stone",
-                #  "Black Panther",
-                #  "Love Actually",
-                #  "The Incredibles",
-                #  "Minions",
-                #  "The Lord of the Rings: The Return of the King",
-                #  "Mean Girls",
-                #  "Midsommar"
+                 "Frozen",
+                 "Titanic", 
+                 "Harry Potter and the Sorcerer's Stone",
+                 "Black Panther",
+                 "Love Actually",
+                 "The Incredibles",
+                 "Minions",
+                 "The Lord of the Rings: The Return of the King",
+                 "Mean Girls",
+                 "Midsommar"
                  ]
 
 # MAIN PAGE:
@@ -152,15 +152,29 @@ def like():
 # X BUTTON CLICKED
 @app.route("/dislike")
 def dislike():
-    current_movie_index = session.get('current_movie_index', 0)
-    total_movies = 11 # temp to reset list after user gone thru 20
+    global top_10_movies
 
-    # Reset 0 if all movies reached
-    next_movie_index = (current_movie_index + 1) % total_movies
+    current_movie_index = session.get('current_movie_index', 0)
+    total_movies = 11  # temp to reset list after user gone thru 20
+
+    next_movie_index = (current_movie_index + 1) % (total_movies-1)
+
+    if (next_movie_index == 0):
+        unfilter_movies = next_movies(", ".join(liked_movies))
+        # Ensure that next_movies returns a list of dictionaries with 'title' as one of the keys
+        top_10_movies = [movie['title'] for movie in unfilter_movies]
+        titles = top_10_movies
+    else:
+        # Retrieve titles from the session
+        titles = session.get('titles', [])
 
     session['current_movie_index'] = next_movie_index
+
+    print(titles)
     
-    return redirect(url_for('home'))
+    # Get the current movie title
+    current_movie_title = titles[current_movie_index]
+    return redirect(url_for('home', current_movie_title=current_movie_title))
 
 # ABOUT PAGE
 @app.route("/about")
@@ -199,3 +213,23 @@ def logout():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=config.get(
         "FLASK_PORT"), debug=True)
+info_get.py
+import os
+import requests
+import json
+
+with open('secret/api-key.json', 'r') as api_file:
+    api = json.load(api_file)
+
+def make_api_request(url, params, headers):
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()
+
+        res = response.json() 
+
+        return(res)
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error making API request: {e}")
+        return None
