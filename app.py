@@ -100,7 +100,7 @@ def home():
 
         # addedToWatch = registered_users.aggregate({ "$match": {"_id": email}}, {"$project" : {"_id": 0, "toWatchLater": 1}})
         # addedToWatch = registered_users.find( {"_id": email }, {"toWatchLater": 1,})
-        document = registered_users.find_one({"_id": "jhzhang@bu.edu"})
+        document = registered_users.find_one({"_id": email})
         to_watch_later = document.get('toWatchLater', [])
         url = document.get('imageURL', [])
         # Ensure it is a list of strings
@@ -219,6 +219,46 @@ def add():
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
+# adding a feature for clear the to watch later list
+@app.route('/clear_to_watch_later')
+def clear_to_watch_later():
+    # Update the document to clear the 'toWatchLater' field
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"toWatchLater": [], "imageURL": []}}
+    )
+
+    if result.modified_count:
+        return f"To Watch Later list cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or list already empty)", 404
+    
+@app.route('/clear_likes_dislikes')
+def clear_likes_dislikes():
+    # Update the document to clear the 'liked' and 'disliked' fields
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"liked": [], "disliked": []}}
+    )
+
+    if result.modified_count:
+        return f"'Liked' and 'Disliked' lists cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or lists already empty)", 404
+
+@app.route('/clear_user_data')
+def clear_user_data():
+    # Update the document to clear the 'liked', 'disliked', 'toWatchLater', and 'imageURL' fields
+    result = registered_users.update_one(
+        {"_id": email},
+        {"$set": {"liked": [], "disliked": [], "toWatchLater": [], "imageURL": []}}
+    )
+
+    if result.modified_count:
+        return f"Data cleared for user {email}", 200
+    else:
+        return f"No changes made for user {email} (user not found or data already cleared)", 404
+    
 # ABOUT PAGE
 @app.route("/about")
 def about():
