@@ -131,6 +131,7 @@ def like():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
     
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -162,6 +163,7 @@ def dislike():
     global top_10_movies
     global liked_movies
     global disliked_movies
+    global current_movie_title
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # to reset list
@@ -276,6 +278,47 @@ def undo_last_liked():
     else:
         return f"No changes made for user {email} (item not found or already removed)", 404
     
+@app.route('/switch_like_dislike')
+def switch_like_dislike():
+    # Assume the current movie title is sent in the request
+    # For example, {"current_movie_title": "Some Movie"}
+    
+    query = {"_id": email, "liked": {"$in": [current_movie_title]}}
+    document = registered_users.find_one(query)
+    print(document)
+    print(bool(document))
+    if bool(document):
+        # Remove the movie from the 'liked' array
+        registered_users.update_one(
+            {"_id": email},
+            {"$pull": {"liked": current_movie_title}}
+        )
+
+        # Add the movie to the 'disliked' array
+        result = registered_users.update_one(
+            {"_id": email},
+            {"$push": {"disliked": current_movie_title}}
+        )
+
+        if result.modified_count:
+            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+        else:
+            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
+    else:
+        registered_users.update_one(
+            {"_id": email},
+            {"$pull": {"disliked": current_movie_title}}
+        )
+
+        # Add the movie to the 'disliked' array
+        result = registered_users.update_one(
+            {"_id": email},
+            {"$push": {"liked": current_movie_title}}
+        )
+        if result.modified_count:
+            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+        else:
+            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
     
 # ABOUT PAGE
 @app.route("/about")
