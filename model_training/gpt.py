@@ -45,6 +45,10 @@ def next_movies(list_of_movies):
     # Theoretically could fetch with something like movies_list[0]["title"]
     movies_list = [{"title": match[0], "year": int(match[1])} for match in movie_matches]
 
+    # Print to terminal for verification
+    print("fetched")
+
+
     # Return the list of next movies
     return movies_list
 
