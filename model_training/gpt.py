@@ -24,7 +24,7 @@ client = OpenAI(api_key=config.get("gpt_api_key"))
 # Year is no longer used but I don't wanna remove it because then it wouldn't make sense to give the result in a dictionary and then I gotta change how that's handled in app.py and it's gonna break things
 def next_movies(liked_movies, disliked_movies):
     
-    user_message = "A person likes these movies: " + liked_movies + "; but dislikes these movies: " + disliked_movies + "; Can you recommend 10 different movies the person may also like? Only output a list with title of the movie and year in parenthesis behind the title."
+    user_message = "A person likes these movies: " + liked_movies + "; but dislikes these movies: " + disliked_movies + "; Can you recommend 10 movies that are not already listed that the person may enjoy watching? Only output a list with title of the movie and year in parenthesis behind the title."
 
     messages = [
         {"role": "system", "content": 'You recommend movies as a numbered list to a person based on the other movies they like.'},
