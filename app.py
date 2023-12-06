@@ -124,6 +124,8 @@ liked_movies = []
 @app.route("/like")
 def like():
     global top_10_movies
+    global liked_movies
+    global disliked_movies
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # temp to reset list after user gone thru 20
@@ -131,7 +133,7 @@ def like():
     next_movie_index = (current_movie_index + 1) % (total_movies-1)
 
     if (next_movie_index == 0):
-        unfilter_movies = next_movies(", ".join(liked_movies))
+        unfilter_movies = next_movies(", ".join(liked_movies), ", ".join(disliked_movies))
         # Ensure that next_movies returns a list of dictionaries with 'title' as one of the keys
         top_10_movies = [movie['title'] for movie in unfilter_movies]
         titles = top_10_movies
@@ -150,9 +152,12 @@ def like():
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
 # X BUTTON CLICKED
+disliked_movies = []
 @app.route("/dislike")
 def dislike():
     global top_10_movies
+    global liked_movies
+    global disliked_movies
 
     current_movie_index = session.get('current_movie_index', 0)
     total_movies = 11  # temp to reset list after user gone thru 20
@@ -160,7 +165,7 @@ def dislike():
     next_movie_index = (current_movie_index + 1) % (total_movies-1)
 
     if (next_movie_index == 0):
-        unfilter_movies = next_movies(", ".join(liked_movies))
+        unfilter_movies = next_movies(", ".join(liked_movies), ", ".join(disliked_movies))
         # Ensure that next_movies returns a list of dictionaries with 'title' as one of the keys
         top_10_movies = [movie['title'] for movie in unfilter_movies]
         titles = top_10_movies
@@ -174,6 +179,7 @@ def dislike():
     
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
+    disliked_movies.append(current_movie_title)
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
 # ABOUT PAGE

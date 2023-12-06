@@ -1,5 +1,5 @@
 secret
 secret/*
-env
+.env
 venv
 .DS_Store
