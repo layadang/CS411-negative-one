@@ -218,7 +218,7 @@ def add():
     print("user email is " + email)
     print("added  movie is " + current_movie_title)
     print("image url " + image_file)
-    registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file}})
+    registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file, "liked": current_movie_title}})
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
