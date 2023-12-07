@@ -56,6 +56,7 @@ top_10_movies = [
 def home():
     global email
     global image_file
+    global first_name
     email = ""
     user_data = session.get("user")
 
@@ -66,7 +67,8 @@ def home():
         resp = json.loads(json_str)
         # Check if 'userinfo' key exists before trying to access 'given_name'
         userinfo = resp.get('userinfo')
-        if userinfo:            
+        if userinfo:           
+            first_name = userinfo['given_name'] 
             name = userinfo['name']
             email = userinfo['email']
            
@@ -98,31 +100,18 @@ def home():
         description = info[2]
         genres = info[3]
 
-        # addedToWatch = registered_users.aggregate({ "$match": {"_id": email}}, {"$project" : {"_id": 0, "toWatchLater": 1}})
-        # addedToWatch = registered_users.find( {"_id": email }, {"toWatchLater": 1,})
-        document = registered_users.find_one({"_id": email})
-        to_watch_later = document.get('toWatchLater', [])
-        url = document.get('imageURL', [])
-        # Ensure it is a list of strings
-        if isinstance(to_watch_later, list):
-            print("To Watch Later:", to_watch_later)
-            print("URL:", url)
-        else:
-            print("The 'toWatchLater' field is not in the expected format.")
-        print("home email is " + str(email))
         return render_template("index.html", 
-                               session=user_data,
+                               first_name=first_name,
                                title=title,
                                image_file=image_file,
                                description=description,
-                               genres=genres,
-                               addedToWatch=str(to_watch_later),
-                               url = str(url))
+                               genres=genres
+                               )
     
     else:
         # user is not signed in:
-        return render_template("not-signed-in.html", 
-                               session=user_data)
+        user_data = None
+        return render_template("not-signed-in.html")
 
 # HEART BUTTON CLICKED:
 liked_movies = []
@@ -188,6 +177,7 @@ def dislike():
     registered_users.update_one({ "_id": email},{ "$push": {"disliked": current_movie_title}})
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
+# STAR BUTTON CLICKED
 @app.route("/add")
 def add():
     global top_10_movies
@@ -211,19 +201,35 @@ def add():
 
     session['current_movie_index'] = next_movie_index
     
-
     # Get the current movie title
     current_movie_title = titles[current_movie_index]
 
-    print("user email is " + email)
-    print("added  movie is " + current_movie_title)
-    print("image url " + image_file)
     registered_users.update_one({ "_id": email},{ "$push": {"toWatchLater": current_movie_title, "imageURL": image_file, "liked": current_movie_title}})
 
     return redirect(url_for('home', current_movie_title=current_movie_title))
 
+# ABOUT PAGE
+@app.route("/about")
+def about():
+    return render_template("about.html", first_name=first_name)
+
+# TO WATCH LIST PAGE
+@app.route("/to-watch-list")
+def to_watch_list():
+    document = registered_users.find_one({"_id": email})
+
+    # return format is array of strings
+    to_watch_later = document.get('toWatchLater', [])
+    image_url = document.get('imageURL', [])
+
+    return render_template('to-watch-list.html', 
+                           first_name=first_name,
+                           to_watch_later=to_watch_later,
+                           image_url=image_url)
+
+# DATABASE FEATURES:
 # adding a feature for clear the to watch later list
-@app.route('/clear_to_watch_later')
+@app.route('/clear-to-watch-later')
 def clear_to_watch_later():
     # Update the document to clear the 'toWatchLater' field
     result = registered_users.update_one(
@@ -232,11 +238,13 @@ def clear_to_watch_later():
     )
 
     if result.modified_count:
-        return f"To Watch Later list cleared for user {email}", 200
+        print("cleared to watch success")
     else:
-        return f"No changes made for user {email} (user not found or list already empty)", 404
+        print("cleared likes/dislikes failed")
+
+    return to_watch_list()
     
-@app.route('/clear_likes_dislikes')
+@app.route('/clear-likes-dislikes')
 def clear_likes_dislikes():
     # Update the document to clear the 'liked' and 'disliked' fields
     result = registered_users.update_one(
@@ -245,11 +253,11 @@ def clear_likes_dislikes():
     )
 
     if result.modified_count:
-        return f"'Liked' and 'Disliked' lists cleared for user {email}", 200
+        print("cleared likes/dislikes success")
     else:
-        return f"No changes made for user {email} (user not found or lists already empty)", 404
+        print("cleared likes/dislikes failed")
 
-@app.route('/clear_user_data')
+@app.route('/clear-user-data')
 def clear_user_data():
     # Update the document to clear the 'liked', 'disliked', 'toWatchLater', and 'imageURL' fields
     result = registered_users.update_one(
@@ -258,13 +266,13 @@ def clear_user_data():
     )
 
     if result.modified_count:
-        return f"Data cleared for user {email}", 200
+        print("cleared all data success")
     else:
-        return f"No changes made for user {email} (user not found or data already cleared)", 404
+        print("cleared all data failed")
 
-#Need to be renamed. This is actually REDO for AddedtoWatch
-@app.route('/undo_last_liked')
-def undo_last_liked():
+# Need to be renamed. This is actually REDO for AddedtoWatch
+@app.route('/undo-add')
+def undo_add():
     # Assume the most recently added item is sent in the request
     # For example, {"last_liked": "Some Item"}
     
@@ -275,9 +283,9 @@ def undo_last_liked():
     )
 
     if result.modified_count:
-        return f"Last liked item '{current_movie_title}' removed for user {email}", 200
+        print("undo add success")
     else:
-        return f"No changes made for user {email} (item not found or already removed)", 404
+        print("undo add failed")
     
 @app.route('/switch_like_dislike')
 def switch_like_dislike():
@@ -317,14 +325,9 @@ def switch_like_dislike():
             {"$push": {"liked": current_movie_title}}
         )
         if result.modified_count:
-            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+            print("switch success")
         else:
-            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
-    
-# ABOUT PAGE
-@app.route("/about")
-def about():
-    return render_template("about.html")
+            print("switch failed")
 
 # OAUTH SETUP:
 @app.route("/signin-google")

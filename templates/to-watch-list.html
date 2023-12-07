@@ -21,27 +21,43 @@
 
     </div>
 
-    <div class="content-about">
-            <div class="proj-description">
-                <p>
-                    This is a Movie Recommendation project that provides personalized 
-                    movie recommendations to users. It utilizes a Flask-based front-end, 
-                    a custom-trained Language Model (LLM) recommendation system, the 
-                    <a class="link-api"
-                        href="https://rapidapi.com/SAdrian/api/moviesdatabase">
-                        MoviesDatabase accessed through RapidAPI </a> 
-                    
-                    and MongoDB to store user information from 
-                    Google OAuth. The project combines these technologies to 
-                    deliver a seamless movie recommendation experience.
-                </p>
-            </div>
+    <h2 style="margin: 5px 0 0; font-size: 25pt;"> What To Watch </h2>
+    <p style="margin-top: 5px;"> 
+        <i>What you've favorited so far from our recommendations </i>
+        {% if to_watch_later %}
+        <span style="position: absolute; right: 10px;"> 
+            <a href = {{ url_for('clear_to_watch_later') }} class = "clear">[X] Clear Selection</a>
+        </span>
+        {% endif %}
+    </p>
 
-            <!-- <div class="get-started">
-                <a href="{{url_for('home')}}"> Get Started → </a>
-            </div> -->
+    {% if to_watch_later %}
+    <div class="watch-container">
+        <ul>
+            {% for i in range(to_watch_later|length) %}
+
+            <div class="watch-list">
+                
+                <div class="watch-list-img"
+                    style="background-image: url('{{ image_url[i] }}');">
+                </div>
+
+                <div style="width: 100%;">
+                    <p> {{ to_watch_later[i] }} </p>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>   
     </div>
 
+    {% else %}
+    <div style="height: 100%; display: flex; align-items: center;">
+         <div class="get-started">
+            <a href="{{url_for('home')}}"> Get Started → </a>
+        </div>   
+    </div>
+
+    {% endif %}
 
 
 </body>
