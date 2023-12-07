@@ -100,7 +100,7 @@ def home():
 
         # addedToWatch = registered_users.aggregate({ "$match": {"_id": email}}, {"$project" : {"_id": 0, "toWatchLater": 1}})
         # addedToWatch = registered_users.find( {"_id": email }, {"toWatchLater": 1,})
-        document = registered_users.find_one({"_id": "jhzhang@bu.edu"})
+        document = registered_users.find_one({"_id": email})
         to_watch_later = document.get('toWatchLater', [])
         url = document.get('imageURL', [])
         # Ensure it is a list of strings
