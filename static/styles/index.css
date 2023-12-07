@@ -239,7 +239,7 @@ a {
 
 ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     white-space: nowrap;
     columns: 6;
     height: 100%;

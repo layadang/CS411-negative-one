@@ -50,6 +50,12 @@ def find_movie(title):
         params['year'] = '2015'
     if (title == "Whiplash"):
         params['year'] = '2014'
+    if (title == "The Holiday"):
+        params['year'] = '2006'
+    if (title == "Aladdin"):
+        params['year'] = '2019'
+    if (title == "About Time"):
+        params['year'] = '2013'
 
     headers = {
         "X-RapidAPI-Key": api.get("laya-Key"),
