@@ -262,6 +262,7 @@ def clear_user_data():
     else:
         return f"No changes made for user {email} (user not found or data already cleared)", 404
 
+#Need to be renamed. This is actually REDO for AddedtoWatch
 @app.route('/undo_last_liked')
 def undo_last_liked():
     # Assume the most recently added item is sent in the request
