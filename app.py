@@ -286,8 +286,10 @@ def undo_add():
         print("undo add success")
     else:
         print("undo add failed")
+
+    return home()
     
-@app.route('/switch_like_dislike')
+@app.route('/swap')
 def switch_like_dislike():
     # Assume the current movie title is sent in the request
     # For example, {"current_movie_title": "Some Movie"}
@@ -310,9 +312,9 @@ def switch_like_dislike():
         )
 
         if result.modified_count:
-            return f"Movie '{current_movie_title}' moved from liked to disliked for user {email}", 200
+            print("swap successful")
         else:
-            return f"No changes made for user {email} (movie not found in liked or already in disliked)", 404
+            print("swap not successful")
     else:
         registered_users.update_one(
             {"_id": email},
@@ -328,6 +330,8 @@ def switch_like_dislike():
             print("switch success")
         else:
             print("switch failed")
+
+    return home()
 
 # OAUTH SETUP:
 @app.route("/signin-google")
