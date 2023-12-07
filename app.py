@@ -257,6 +257,8 @@ def clear_likes_dislikes():
     else:
         print("cleared likes/dislikes failed")
 
+    return home()
+
 @app.route('/clear-user-data')
 def clear_user_data():
     # Update the document to clear the 'liked', 'disliked', 'toWatchLater', and 'imageURL' fields
