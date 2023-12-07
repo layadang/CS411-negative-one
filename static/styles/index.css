@@ -10,6 +10,7 @@
 body {
     background: rgb(41,217,221);
     background: linear-gradient(90deg, var(--theme3) 35%, var(--theme1) 100%);
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,6 +43,7 @@ a {
 }
 
 .box {
+    z-index: 10;
     background-color: white;
     height: 80px;
     width: 180px;
@@ -88,7 +90,6 @@ a {
 
 .box:hover .dropdown-content p {
     display: inline-block;
-
 }
 
 .box:hover {
@@ -97,16 +98,16 @@ a {
 
 .get-started {
     background-color: white;
-    width: 2000px;
-    height: 80px;
+    width: 500px;
+    height: 100px;
     border-radius: 25px;
-    font-size: 16pt;
+    font-size: 30pt;
     font-weight: 700;
-    margin-left: 100px;
-    margin-right: 0;
     padding: 0 0;
     transition: all .2s ease-in-out;
     text-align: center;
+    margin-bottom: 200px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,6 +124,7 @@ a {
     border-radius: 25px;
 
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
     background-color: white;
@@ -148,16 +150,21 @@ a {
 }
 
 .choice-box .buttons button {
-    width: 80px;
-    height: 80px;
+    width: 85px;
+    height: 85px;
     background-color: white;
     border-radius: 100px;
     border: none;
-    margin: 0 30px 0;
+    margin: 0 15px 0;
     margin-bottom: 20px;
     font-size: 20pt;
     transition: all .2s ease-in-out;
 }
+
+.choice-box .buttons {
+    width: 90%;
+}
+
 
 .choice-box button:hover {
     cursor: pointer;
@@ -178,14 +185,6 @@ a {
     align-items: center;
 }
 
-.content-desc2 {
-    height: 100%;
-    width: 80%;
-    margin-left: 100px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
 
 .content-about {
     height: 100%;
@@ -226,6 +225,7 @@ a {
     color: black;
     border-radius: 25px;
     height: 80%;
+    margin: 0 100px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,6 +235,54 @@ a {
     margin: 20px 50px 20px;
     line-height: 1.8;
     text-align: center;
+}
+
+ul {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    columns: 6;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.watch-container {
+    background-color: white;
+    overflow-y: hidden;
+    overflow-x: auto;
+    margin-bottom: 60px;
+    width: 100%;
+}
+.watch-list {
+    display: inline;
+    width: 400px;
+    height: 100%;
+    border-radius: 25px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.watch-list .watch-list-img {
+    height: 400px;
+    width: 300px;
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center center; 
+}
+
+.watch-list p {
+    text-align: center;
+    font-size: 15pt;
+    font-weight: 500;
+}
+
+.clear {
+    color: white;
 }
 
 /* this is modified Google's sign in button code */
