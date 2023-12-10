@@ -73,7 +73,7 @@ Before you start, ensure you have Python installed and preferably using Python v
 3. Add movies to your watchlist and rate them to receive more personalized recommendations.
 
 ## Demo
-[![Demo Video](https://i1.ytimg.com/vi/u75CO8YKH8s/sddefault.jpg)](https://www.youtube.com/watch?v=u75CO8YKH8s)
+[![Demo Video](https://i1.ytimg.com/vi/UdMA99KVLvQ/sddefault.jpg)](https://www.youtube.com/watch?v=UdMA99KVLvQ)
 
 
 ## License
