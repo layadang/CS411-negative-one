@@ -23,9 +23,10 @@ This is a Movie Recommendation project that provides personalized movie recommen
 - **Movie Recommendations**: ChatGPT API is prompted with info about the user, and it provides movie recommendations based on a user's preferences and viewing history.
 ![features](https://github.com/layadang/CS411-negative-one/assets/104788153/36479270-2b68-42a3-8dd5-06cfc68898ff)
 
-- **RapidAPI MovieDatabase**: The project uses the MovieDatabase API from RapidAPI to fetch movie data, including titles, years, images, genres, and plots.
+- **User Profile**: User information, including their likes, dislikes, and starred movies, is stored in a MongoDB database. Users can access their starred movies for later on the website.
+![watchlist](https://github.com/layadang/CS411-negative-one/assets/104788153/dc23b2a6-77d9-48df-9a35-b4f9c8058c37)
 
-- **User Profile**: User information, including their likes, dislikes, and starred movies, is stored in a MongoDB database.
+- **RapidAPI MovieDatabase**: The project uses the [MovieDatabase API from RapidAPI](https://rapidapi.com/SAdrian/api/moviesdatabase) to fetch movie data, including titles, years, images, genres, and plots.
 
 
 ## Prerequisites
@@ -38,6 +39,7 @@ Before you start, ensure you have Python installed and preferably using Python v
 
    ```bash
    git clone git@github.com:layadang/CS411-negative-one.git
+
    ```
 
 2. Install dependencies:
