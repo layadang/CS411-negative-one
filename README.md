@@ -1,5 +1,16 @@
 # CS411 Team Negative One: Movie Recommendation Project
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Demo Video](#demo)
+- [License](#license)
+- [Contribution](#contribution)
+
 ## Overview
 
 This is a Movie Recommendation project that provides personalized movie recommendations to users. It utilizes a Flask-based front-end, LLM recommendation system through OpenAI, the IMDb public sample API, Google OAuth for authentication, and MongoDB to store user information. The project combines these technologies to deliver a seamless movie recommendation experience. The user interface is similar to Tinder. 
@@ -42,6 +53,7 @@ Before you start, ensure you have Python installed and preferably using Python v
 3. Obtain Google OAuth API credentials:
 
    - must obtain MovieDatabase API key from Laya and Xinny (depending on which file you are trying to run)
+   - must obtain MongoDB URI from Harris
    - must obtain Google Oauth credentials from Laya
    - must obtain ChatGPT API key from Xinny
    - must obtain Google Vertex AI API key from Xinny (if you run dead code)
@@ -60,6 +72,10 @@ Before you start, ensure you have Python installed and preferably using Python v
 2. Explore movie recommendations based on your likes, dislikes, and watchlist.
 3. Add movies to your watchlist and rate them to receive more personalized recommendations.
 
+## Demo
+[![Demo Video](https://i1.ytimg.com/vi/u75CO8YKH8s/sddefault.jpg)](https://www.youtube.com/watch?v=u75CO8YKH8s)
+
+
 ## License
 
 This project is not currently licensed RIP.
@@ -67,8 +83,26 @@ This project is not currently licensed RIP.
 ## Contribution
 
 This project is built by Team Negative One:
-- Laya: front end via flask, oauth config
-- Xinny: ~google vertex llm training with moviedatabase data~ integrating chatgpt api
-- Harris, Cindy, Xavier: user info database through mongodb
+
+### System Design
+- **Xinny**
+- **Harris**
+
+### Feature Realization
+- **Laya**
+- **Xinny**
+- **Harris**
+
+### Breakdowns
+- **Laya:**
+  - Front-end development via Flask
+  - OAuth configuration
+
+- **Xinny:**
+  - Integrating ChatGPT API
+  - ~Google Vertex LLM training with MovieDatabase data~
+
+- **Harris, Cindy, Xavier:**
+  - User info database management through MongoDB
 
 Happy movie watching! 🍿🎬
