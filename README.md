@@ -7,6 +7,7 @@
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
+- [Demo Video](#demo)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -52,6 +53,7 @@ Before you start, ensure you have Python installed and preferably using Python v
 3. Obtain Google OAuth API credentials:
 
    - must obtain MovieDatabase API key from Laya and Xinny (depending on which file you are trying to run)
+   - must obtain MongoDB URI from Harris
    - must obtain Google Oauth credentials from Laya
    - must obtain ChatGPT API key from Xinny
    - must obtain Google Vertex AI API key from Xinny (if you run dead code)
@@ -69,6 +71,10 @@ Before you start, ensure you have Python installed and preferably using Python v
 1. Log in using your Google account.
 2. Explore movie recommendations based on your likes, dislikes, and watchlist.
 3. Add movies to your watchlist and rate them to receive more personalized recommendations.
+
+## Demo
+[![Demo Video](https://i1.ytimg.com/vi/u75CO8YKH8s/sddefault.jpg)](https://www.youtube.com/watch?v=u75CO8YKH8s)
+
 
 ## License
 
