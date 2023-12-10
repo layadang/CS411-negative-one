@@ -55,7 +55,7 @@ Before you start, ensure you have Python installed and preferably using Python v
    ```
    refer to requirements.txt for more version info
 
-3. Obtain Google OAuth API credentials:
+3. Obtain secret keys:
 
    - must obtain MovieDatabase API key from Laya and Xinny (depending on which file you are trying to run)
    - must obtain MongoDB URI from Harris
