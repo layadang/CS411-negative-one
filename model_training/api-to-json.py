@@ -2,6 +2,9 @@ import os
 import requests
 import json
 
+with open('secret/api-key-2.json', 'r') as api_file:
+    api = json.load(api_file)
+
 def make_api_request(url, params, headers):
     try:
         response = requests.get(url, params=params, headers=headers)
@@ -87,8 +90,8 @@ if __name__ == "__main__":
     }
 
     headers = {
-        "X-RapidAPI-Key": "deba0d8e00msh8e8b85337b08fc9p10c542jsn1c6116b93fb4",
-        "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
+        "X-RapidAPI-Key": api.get("xinny-Key"),
+        "X-RapidAPI-Host": api.get("xinny-Host")
     }
 
     # Construct the absolute path for the JSON file
