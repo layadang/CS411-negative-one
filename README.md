@@ -18,6 +18,7 @@ This is a Movie Recommendation project that provides personalized movie recommen
 ## Features
 
 - **User Authentication**: Users can log in using their Google accounts via OAuth, ensuring secure and authenticated access to the system.
+  ![oauth](https://github.com/layadang/CS411-negative-one/assets/104788153/0ea16769-40d5-47d5-819c-4ca65ec05f87)
 
 - **Movie Recommendations**: ChatGPT API is prompted with info about the user, and it provides movie recommendations based on a user's preferences and viewing history.
 
