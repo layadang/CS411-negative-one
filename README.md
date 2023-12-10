@@ -18,13 +18,15 @@ This is a Movie Recommendation project that provides personalized movie recommen
 ## Features
 
 - **User Authentication**: Users can log in using their Google accounts via OAuth, ensuring secure and authenticated access to the system.
-  ![oauth](https://github.com/layadang/CS411-negative-one/assets/104788153/0ea16769-40d5-47d5-819c-4ca65ec05f87)
+![oauth](https://github.com/layadang/CS411-negative-one/assets/104788153/c9efe00b-373c-4353-9dee-2245ab38769e)
 
 - **Movie Recommendations**: ChatGPT API is prompted with info about the user, and it provides movie recommendations based on a user's preferences and viewing history.
+![features](https://github.com/layadang/CS411-negative-one/assets/104788153/36479270-2b68-42a3-8dd5-06cfc68898ff)
 
 - **RapidAPI MovieDatabase**: The project uses the MovieDatabase API from RapidAPI to fetch movie data, including titles, years, images, genres, and plots.
 
 - **User Profile**: User information, including their likes, dislikes, and starred movies, is stored in a MongoDB database.
+
 
 ## Prerequisites
 
