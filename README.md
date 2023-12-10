@@ -24,7 +24,7 @@ This is a Movie Recommendation project that provides personalized movie recommen
 ![features](https://github.com/layadang/CS411-negative-one/assets/104788153/36479270-2b68-42a3-8dd5-06cfc68898ff)
 
 - **User Profile**: User information, including their likes, dislikes, and starred movies, is stored in a MongoDB database. Users can access their starred movies for later on the website.
-![watchlist](https://github.com/layadang/CS411-negative-one/assets/104788153/dc23b2a6-77d9-48df-9a35-b4f9c8058c37)
+![watchlist](https://github.com/layadang/CS411-negative-one/assets/104788153/7381981e-2d14-44f9-ac40-b469f89cd12f)
 
 - **RapidAPI MovieDatabase**: The project uses the [MovieDatabase API from RapidAPI](https://rapidapi.com/SAdrian/api/moviesdatabase) to fetch movie data, including titles, years, images, genres, and plots.
 
